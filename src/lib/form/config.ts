@@ -121,7 +121,7 @@ export const screens: Screen[] = [
     id: "financing",
     type: "single",
     field: "financing",
-    question: "Are you Pre-Approved for a Home Loan or have Proof of Funds?",
+    question: "How far are you into the home-buying process?",
     autoAdvance: true,
     options: withLetters([
       { id: "preapproved", label: "Yes, I have been Pre-Approved and I’m Ready" },
