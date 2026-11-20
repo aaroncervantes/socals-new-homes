@@ -267,7 +267,7 @@ export function ScreenView({
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? errorId : undefined}
               onChange={(event) => onAreaOther(event.target.value)}
-              className="mt-2 w-full border-0 border-b border-ink/25 bg-transparent py-2 text-[18px] text-ink outline-none placeholder:text-[#8a847c] focus:border-ink"
+              className="mt-2 w-full appearance-none border-0 border-b border-ink/25 bg-transparent py-2 text-[18px] text-ink shadow-none outline-none placeholder:text-[#8a847c] focus:border-ink focus:outline-none focus-visible:outline-none"
             />
           </motion.label>
         ) : null}
@@ -292,8 +292,7 @@ export function ScreenView({
             aria-describedby={error ? errorId : undefined}
             onChange={(event) => onText(event.target.value)}
             className={cn(
-              "w-full border-0 border-b border-ink/25 bg-transparent py-3 font-serif text-[1.7rem] leading-tight text-ink shadow-none outline-none placeholder:text-[#8a847c] focus:border-ink",
-              screen.type === "phone" && "appearance-none focus:outline-none focus-visible:outline-none",
+              "w-full appearance-none border-0 border-b border-ink/25 bg-transparent py-3 font-serif text-[1.7rem] leading-tight text-ink shadow-none outline-none placeholder:text-[#8a847c] focus:border-ink focus:outline-none focus-visible:outline-none",
             )}
           />
         </div>

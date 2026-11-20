@@ -36,8 +36,8 @@ body:not(:has(.legal-page)) {
   outline-offset: 3px;
 }
 
-input[type="tel"]:focus,
-input[type="tel"]:focus-visible {
+input:not([type="checkbox"]):focus,
+input:not([type="checkbox"]):focus-visible {
   outline: none;
   box-shadow: none;
 }
