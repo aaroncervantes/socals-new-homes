@@ -15,9 +15,8 @@ export const screens: Screen[] = [
     eyebrow: "Welcome to",
     question: "SoCal’s New Homes",
     paragraphs: [
-      "Find your next new construction home in Southern California.",
-      "New communities, incentives, quick move-ins.",
-      "A few questions narrow the options.",
+      "We’re so glad you’re here! Whether you’re ready to buy or just browsing, this quick form will help us better serve you",
+      "Your dream home could be just a click away.",
     ],
     footnote: "Takes about 1 minute",
     cta: "Find my home",
