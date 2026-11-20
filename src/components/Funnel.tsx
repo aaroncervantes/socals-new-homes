@@ -163,7 +163,7 @@ export function Funnel() {
     const field = screen.field;
     timer.current = window.setTimeout(() => {
       continueFrom(screen.id, { field, value: id });
-    }, 160);
+    }, 220);
   }
 
   function setText(value: string) {
@@ -346,10 +346,12 @@ export function Funnel() {
           aria-label="Progress"
           data-testid="progress"
         >
-          <div
+          <motion.div
             data-testid="progress-bar"
-            className="h-full origin-left bg-ink transition-[width] duration-500 ease-out motion-reduce:transition-none"
-            style={{ width: `${Math.max(0, Math.min(1, progress)) * 100}%` }}
+            className="h-full w-full origin-left bg-ink"
+            initial={false}
+            animate={{ scaleX: Math.max(0, Math.min(1, progress)) }}
+            transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 34, mass: 0.7 }}
           />
         </div>
       </div>
@@ -363,14 +365,12 @@ export function Funnel() {
             variants={{
               enter: (dir: number) => ({
                 opacity: 0,
-                x: reduce ? 0 : dir * 32,
-                y: reduce ? 0 : 8,
+                x: reduce ? 0 : dir * 110,
               }),
-              center: { opacity: 1, x: 0, y: 0 },
+              center: { opacity: 1, x: 0 },
               exit: (dir: number) => ({
                 opacity: 0,
-                x: reduce ? 0 : dir * -24,
-                y: reduce ? 0 : -6,
+                x: reduce ? 0 : dir * -110,
                 pointerEvents: "none" as const,
               }),
             }}
@@ -380,7 +380,7 @@ export function Funnel() {
             transition={
               reduce
                 ? { duration: 0.16, ease: "easeOut" }
-                : { type: "spring", stiffness: 380, damping: 40, mass: 0.8 }
+                : { type: "spring", stiffness: 480, damping: 40, mass: 0.66 }
             }
             className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-y-contain"
           >

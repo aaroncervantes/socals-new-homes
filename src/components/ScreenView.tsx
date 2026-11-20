@@ -17,7 +17,9 @@ type Props = {
   onRestart: () => void;
 };
 
-const settle = { type: "spring" as const, stiffness: 420, damping: 42, mass: 0.75 };
+const settle = { type: "spring" as const, stiffness: 520, damping: 40, mass: 0.62 };
+const displayTitle =
+  "font-serif tracking-[-0.03em] text-ink outline-none text-center text-[2.6rem] leading-[1.05] sm:text-6xl";
 
 function LinkedCopy({
   text,
@@ -35,6 +37,19 @@ function LinkedCopy({
         {link.text}
       </a>
       {after}
+    </>
+  );
+}
+
+function ChoiceFace({ option }: { option: Option }) {
+  return (
+    <>
+      {option.letter ? (
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-current/30 text-[13px] font-medium">
+          {option.letter}
+        </span>
+      ) : null}
+      <span>{option.label}</span>
     </>
   );
 }
@@ -60,45 +75,31 @@ function ChoiceButton({
       data-testid={`option-${option.id}`}
       onClick={onClick}
       variants={{
-        hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : 10 },
-        show: { opacity: 1, y: 0, transition: reduce ? { duration: 0.12 } : settle },
+        hidden: { opacity: reduce ? 1 : 0 },
+        show: { opacity: 1, transition: reduce ? { duration: 0.16 } : settle },
       }}
       whileTap={reduce ? undefined : { scale: 0.975 }}
       transition={reduce ? { duration: 0.12 } : settle}
-      className={cn(
-        "flex min-h-14 w-full items-center gap-3 rounded-2xl border px-3.5 py-3 text-left text-[16.5px] leading-snug",
-        "transition-colors duration-200 ease-out motion-reduce:transition-none",
-        selected ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink",
-      )}
+      className="relative flex min-h-14 w-full overflow-hidden rounded-2xl border border-line bg-card text-left text-[16.5px] leading-snug text-ink"
     >
-      {option.letter ? (
-        <motion.span
-          aria-hidden={false}
-          animate={{ scale: selected && !reduce ? 1 : 0.96 }}
-          transition={reduce ? { duration: 0.12 } : settle}
-          className={cn(
-            "grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[13px] font-medium",
-            selected ? "border-white/35 text-paper" : "border-line text-ink",
-          )}
-        >
-          {option.letter}
-        </motion.span>
-      ) : (
-        <span
-          className={cn(
-            "grid h-5 w-5 shrink-0 place-items-center rounded-[6px] border",
-            selected ? "border-paper bg-paper text-ink" : "border-line bg-paper",
-          )}
-          aria-hidden="true"
-        >
-          {selected ? (
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2.2 6.2 4.7 8.7 9.8 3.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          ) : null}
+      <span className="relative z-10 flex min-w-0 flex-1 items-center gap-3 px-3.5 py-3">
+        <ChoiceFace option={option} />
+      </span>
+      <motion.span
+        aria-hidden="true"
+        className="absolute inset-0 flex items-center bg-ink text-paper"
+        initial={false}
+        animate={
+          reduce
+            ? { opacity: selected ? 1 : 0, clipPath: "inset(0% 0% 0% 0%)" }
+            : { opacity: 1, clipPath: selected ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)" }
+        }
+        transition={reduce ? { duration: 0.16, ease: "easeOut" } : { duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
+      >
+        <span className="flex min-w-0 flex-1 items-center gap-3 px-3.5 py-3">
+          <ChoiceFace option={option} />
         </span>
-      )}
-      <span>{option.label}</span>
+      </motion.span>
     </motion.button>
   );
 }
@@ -135,9 +136,13 @@ export function ScreenView({
     <div data-testid={`screen-${screen.id}`}>
       {screen.type === "welcome" ? (
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={reduce ? { duration: 0.12 } : settle}
+          initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.16 }}
+          animate={reduce ? { opacity: 1, scale: 1 } : { opacity: 1, scale: [1.16, 0.96, 1] }}
+          transition={
+            reduce
+              ? { duration: 0.16, ease: "easeOut" }
+              : { duration: 0.42, times: [0, 0.58, 1], ease: [0.16, 1, 0.3, 1] }
+          }
           className="mb-2 flex justify-center"
         >
           <Logo className="h-48 w-48 sm:h-56 sm:w-56" />
@@ -168,10 +173,9 @@ export function ScreenView({
           tabIndex={-1}
           data-autofocus={screen.type === "text" || screen.type === "phone" ? undefined : "true"}
           className={cn(
-            "font-serif tracking-[-0.03em] text-ink outline-none",
             screen.type === "welcome"
-              ? "mt-1 text-center text-[2.6rem] leading-[1.05] sm:text-6xl"
-              : "mt-3 text-[1.85rem] leading-[1.15] sm:text-[2.35rem]",
+              ? cn(displayTitle, "mt-1")
+              : "mt-3 font-serif text-[1.85rem] leading-[1.15] tracking-[-0.03em] text-ink outline-none sm:text-[2.35rem]",
             number == null && !screen.eyebrow ? "mt-0" : "",
           )}
         >
@@ -190,6 +194,22 @@ export function ScreenView({
         </p>
       ) : null}
 
+      {screen.type === "done" && screen.paragraphs?.[0] ? (
+        <motion.h1
+          data-testid="thanks-line"
+          initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.14 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={
+            reduce
+              ? { duration: 0.16, ease: "easeOut" }
+              : { type: "spring", stiffness: 640, damping: 24, mass: 0.58 }
+          }
+          className={cn(displayTitle, "mt-1 text-balance")}
+        >
+          {fillCopy(screen.paragraphs[0], answers)}
+        </motion.h1>
+      ) : null}
+
       {screen.paragraphs?.length ? (
         <div
           className={cn(
@@ -198,7 +218,7 @@ export function ScreenView({
               "mx-auto mt-7 max-w-[34ch] space-y-5 text-center text-[17px] leading-[1.5] text-balance text-ink sm:max-w-[40ch] sm:text-[18px]",
           )}
         >
-          {screen.paragraphs.map((paragraph) => (
+          {(screen.type === "done" ? screen.paragraphs.slice(1) : screen.paragraphs).map((paragraph) => (
             <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
           ))}
         </div>
