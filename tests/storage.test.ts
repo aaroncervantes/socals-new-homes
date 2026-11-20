@@ -41,7 +41,6 @@ function submission(key = crypto.randomUUID()): Submission {
       firstName: "Mary-Jane",
       lastName: "O’Brien",
       area: "orange-county",
-      cities: "",
       phone: "9495550100",
       price: "1m-plus",
       preferences: ["unsure", "adu"],
@@ -76,7 +75,6 @@ test("a lead is stored once, email and CRM are skipped without credentials", asy
   assert.equal(row.phoneE164, "+19495550100");
   assert.equal(row.classification, "nurture_lead");
   assert.deepEqual(row.preferences, ["adu"]);
-  assert.equal(row.cities, null);
   assert.equal(row.areaOther, null);
   assert.equal(row.consent, true);
   assert.equal(row.consentVersion, CONSENT_VERSION);

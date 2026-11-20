@@ -77,7 +77,6 @@ const viewports = [
   await page.keyboard.press("Enter");
   await page.getByTestId("screen-area").waitFor();
   await page.getByTestId("option-san-bernardino").click();
-  await page.getByTestId("cities-input").fill("Corona");
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-phone").waitFor();
   const phone = page.getByTestId("screen-phone").getByTestId("text-input");
@@ -89,7 +88,7 @@ const viewports = [
   check("phone format", formatted === "(909) 555-0148", formatted);
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-price").waitFor();
-  await page.getByTestId("option-under-500").click();
+  await page.getByTestId("option-under-650").click();
   await page.getByTestId("screen-preferences").waitFor();
   await page.screenshot({ path: `${shots}/preferences-390.png` });
   await noHorizontalScroll(page, "preferences");

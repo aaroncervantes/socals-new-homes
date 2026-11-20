@@ -15,9 +15,8 @@ function payload(overrides = {}) {
       firstName: "Funnel",
       lastName: "Test",
       area: "san-bernardino",
-      cities: "Ontario",
       phone: "9095550199",
-      price: "under-500",
+      price: "under-650",
       preferences: ["beds-4", "incentives"],
       financing: "ready-to-preapprove",
       timeline: "1-3",
@@ -125,6 +124,7 @@ const storedOk =
   stored.leads[0].utm_source === "instagram" &&
   stored.leads[0].consent === 1 &&
   stored.leads[0].phone_e164 === "+19095550199" &&
+  stored.leads[0].cities == null &&
   stored.events >= 1;
 
 console.log(JSON.stringify({ ...report, stored }, null, 2));

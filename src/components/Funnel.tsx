@@ -195,13 +195,6 @@ export function Funnel() {
     setError(null);
   }
 
-  function setCities(value: string) {
-    const current = stateRef.current;
-    if (!current) return;
-    commit({ ...current, answers: { ...current.answers, cities: value.slice(0, 200) } });
-    setError(null);
-  }
-
   function setAreaOther(value: string) {
     const current = stateRef.current;
     if (!current) return;
@@ -276,7 +269,6 @@ export function Funnel() {
             lastName: current.answers.lastName,
             area: current.answers.area,
             areaOther: current.answers.areaOther ?? "",
-            cities: current.answers.cities ?? "",
             phone: current.answers.phone,
             price: current.answers.price,
             preferences: current.answers.preferences ?? [],
@@ -430,7 +422,6 @@ export function Funnel() {
                 onSingle={chooseSingle}
                 onMulti={togglePreference}
                 onText={setText}
-                onCities={setCities}
                 onAreaOther={setAreaOther}
                 onConsent={setConsent}
                 onRestart={restart}

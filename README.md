@@ -22,7 +22,7 @@ npm start
 1. Welcome
 2. Buying journey
 3. If they are just browsing, they get a short follow-us screen and no contact form
-4. Otherwise: first name, last name, area (plus optional cities), phone, price, home preferences, financing, timeline, consent, submit
+4. Otherwise: first name, last name, area, phone, price, home preferences, financing, timeline, consent, submit
 5. Success, with the text line (909) 406-6560
 
 Back follows the path they actually took. Progress is based on that path, not on every question in the file. Refresh restores an unfinished funnel from this browser. A successful submit clears that local copy. Nothing is a lead until submit.
@@ -62,7 +62,7 @@ Copy `.env.example`. Nothing in that file is a secret. Do not commit `.env`.
 
 Email is skipped, and the lead is still saved, when any of the three email variables is missing. CRM is skipped when GoHighLevel is not configured. A database failure does not show the thank-you screen.
 
-The webhook receives a flat JSON object: firstName, lastName, phone, source (`SoCal’s New Homes Website`), leadClassification, buyingJourney, area, areaOther, cities, budget, homePreferences, financing, timeline, utmSource, utmMedium, utmCampaign, submittedAt.
+The webhook receives a flat JSON object: firstName, lastName, phone, source (`SoCal’s New Homes Website`), leadClassification, buyingJourney, area, areaOther, budget, homePreferences, financing, timeline, utmSource, utmMedium, utmCampaign, submittedAt.
 
 ## Analytics
 
@@ -72,7 +72,7 @@ UTM parameters from the landing URL are kept for the whole visit and saved on th
 
 ## Later campaign routes
 
-`src/lib/campaigns.ts` holds presets for Corona, Ontario, Fontana, Jurupa Valley, and Rancho Cucamonga. The routes are not built. A later page can send people to `/?campaign=corona`, which preselects Riverside and the city. Ontario, Fontana, and Rancho Cucamonga preselect San Bernardino County. `?area=` preselects only a current option: san-bernardino, riverside, orange-county, los-angeles, or other.
+`src/lib/campaigns.ts` holds presets for Corona, Ontario, Fontana, Jurupa Valley, and Rancho Cucamonga. The routes are not built. A later page can send people to `/?campaign=corona`, which preselects Riverside. Ontario, Fontana, and Rancho Cucamonga preselect San Bernardino County. `?area=` preselects only a current option: san-bernardino, riverside, orange-county, los-angeles, or other.
 
 ## Brand and legal placeholders
 

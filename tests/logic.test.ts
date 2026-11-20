@@ -15,9 +15,8 @@ const qualified: Answers = {
   firstName: "Alex",
   lastName: "Rivera",
   area: "san-bernardino",
-  cities: "Corona",
   phone: "(909) 555-0199",
-  price: "under-500",
+  price: "under-650",
   preferences: ["beds-3", "quick-move-in"],
   financing: "preapproved",
   timeline: "asap",
@@ -75,10 +74,12 @@ test("classification rules", () => {
   assert.equal(classifyLead({ journey: "soon", timeline: "3-6" }), "qualified_lead");
   assert.equal(classifyLead({ journey: "soon", timeline: "6-plus" }), "nurture_lead");
   assert.equal(classifyLead({ journey: "soon", timeline: "exploring" }), "nurture_lead");
-  assert.equal(classifyLead({ journey: "ready", price: "under-500" } as never), "qualified_lead");
+  assert.equal(classifyLead({ journey: "ready", price: "under-650" } as never), "qualified_lead");
 });
 
 test("phone formatting and validation", () => {
+  assert.equal(formatUsPhone(""), "");
+  assert.equal(formatUsPhone("9095550123"), "(909) 555-0123");
   assert.equal(formatUsPhone("9095550199"), "(909) 555-0199");
   assert.equal(formatUsPhone("+1 (909) 555-0199"), "(909) 555-0199");
   assert.equal(phoneError("909555"), "Enter a complete phone number.");
@@ -91,9 +92,9 @@ test("submission accepts a low budget and rejects a browser payload", () => {
   const ok = parseSubmission(payload(qualified));
   assert.equal(ok.ok, true);
   if (ok.ok) {
-    assert.equal(ok.value.price, "under-500");
+    assert.equal(ok.value.price, "under-650");
     assert.equal(ok.value.phoneE164, "+19095550199");
-    assert.equal(ok.value.cities, "Corona");
+    assert.equal("cities" in ok.value, false);
   }
   const browsing = parseSubmission(payload({ ...qualified, journey: "browsing" }));
   assert.equal(browsing.ok, false);
@@ -119,8 +120,7 @@ test("other area stores a short typed value and ignores it otherwise", () => {
   assert.equal(long.ok, false);
 });
 
-test("campaign presets prefill a listed county and city", () => {
-  assert.equal(getCampaign("Corona")?.cities, "Corona");
+test("campaign presets prefill a listed county", () => {
   assert.equal(getCampaign("Corona")?.area, "riverside");
   assert.equal(getCampaign("rancho-cucamonga")?.area, "san-bernardino");
   assert.equal(getCampaign("missing"), null);

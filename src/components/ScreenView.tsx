@@ -15,7 +15,6 @@ type Props = {
   onSingle: (id: string) => void;
   onMulti: (id: string) => void;
   onText: (value: string) => void;
-  onCities: (value: string) => void;
   onAreaOther: (value: string) => void;
   onConsent: (value: boolean) => void;
   onRestart: () => void;
@@ -106,7 +105,6 @@ export function ScreenView({
   onSingle,
   onMulti,
   onText,
-  onCities,
   onAreaOther,
   onConsent,
   onRestart,
@@ -237,20 +235,6 @@ export function ScreenView({
         ) : null}
       </AnimatePresence>
 
-      {screen.extra ? (
-        <label className="mt-6 block">
-          <span className="text-[15px] text-muted">{screen.extra.label}</span>
-          <input
-            data-testid="cities-input"
-            value={answers.cities ?? ""}
-            placeholder={screen.extra.placeholder}
-            maxLength={200}
-            onChange={(event) => onCities(event.target.value)}
-            className="mt-2 w-full border-0 border-b border-ink/25 bg-transparent py-2 text-[18px] text-ink outline-none placeholder:text-[#8a847c] focus:border-ink"
-          />
-        </label>
-      ) : null}
-
       {screen.type === "text" || screen.type === "phone" ? (
         <div className="mt-8">
           <label className="sr-only" htmlFor={inputId}>
@@ -260,6 +244,7 @@ export function ScreenView({
             id={inputId}
             data-testid="text-input"
             data-autofocus="true"
+            type={screen.type === "phone" ? "tel" : "text"}
             value={textValue}
             placeholder={screen.placeholder}
             autoComplete={screen.autoComplete}
@@ -268,7 +253,10 @@ export function ScreenView({
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? errorId : undefined}
             onChange={(event) => onText(event.target.value)}
-            className="w-full border-0 border-b border-ink/25 bg-transparent py-3 font-serif text-[1.7rem] leading-tight text-ink outline-none placeholder:text-[#8a847c] focus:border-ink"
+            className={cn(
+              "w-full border-0 border-b border-ink/25 bg-transparent py-3 font-serif text-[1.7rem] leading-tight text-ink shadow-none outline-none placeholder:text-[#8a847c] focus:border-ink",
+              screen.type === "phone" && "appearance-none focus:outline-none focus-visible:outline-none",
+            )}
           />
         </div>
       ) : null}

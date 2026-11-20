@@ -36,6 +36,12 @@ body:not(:has(.legal-page)) {
   outline-offset: 3px;
 }
 
+input[type="tel"]:focus,
+input[type="tel"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 button,
 a,
 input {

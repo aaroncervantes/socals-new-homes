@@ -5,7 +5,7 @@ export type AreaId =
   | "orange-county"
   | "los-angeles"
   | "other";
-export type PriceId = "under-500" | "500-650" | "650-800" | "800-1m" | "1m-plus" | "unsure";
+export type PriceId = "under-650" | "650-1m" | "1m-plus" | "unsure";
 export type FinancingId = "preapproved" | "ready-to-preapprove" | "cash" | "figuring-out";
 export type TimelineId = "asap" | "1-3" | "3-6" | "6-plus" | "exploring";
 export type PreferenceId =
@@ -31,7 +31,6 @@ export type Answers = {
   lastName?: string;
   area?: AreaId;
   areaOther?: string;
-  cities?: string;
   phone?: string;
   price?: PriceId;
   preferences?: PreferenceId[];
@@ -70,7 +69,6 @@ export type Screen = {
   autoComplete?: string;
   autoAdvance?: boolean;
   options?: Option[];
-  extra?: { field: "cities"; label: string; placeholder: string };
   reveal?: { when: string; field: "areaOther"; label: string; placeholder: string };
   next?: string;
   branchingRules?: { when: string; next: string }[];

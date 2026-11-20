@@ -23,7 +23,6 @@ export type Submission = {
   journey: QualifiedJourney;
   area: AreaId;
   areaOther: string | null;
-  cities: string | null;
   price: PriceId;
   preferences: PreferenceId[];
   financing: FinancingId;
@@ -71,15 +70,6 @@ export function validateScreen(screen: Screen, answers: Partial<Answers>): strin
       const typed = parseAreaOther("other", answers.areaOther);
       if (!typed.ok) return typed.error;
     }
-    if (screen.extra) {
-      const cities = answers.cities;
-      if (typeof cities === "string" && cleanLine(cities).length > 200) {
-        return "Please shorten the cities list.";
-      }
-      if (typeof cities === "string" && /[<>]/.test(cities)) {
-        return "Please remove special characters from the cities list.";
-      }
-    }
     return null;
   }
 
@@ -114,16 +104,6 @@ function parseAreaOther(
   if (!cleaned) return { ok: false, error: "Please type the area." };
   if (cleaned.length > 60) return { ok: false, error: "Please shorten the area." };
   if (/[<>]/.test(cleaned)) return { ok: false, error: "Please remove special characters from the area." };
-  return { ok: true, value: cleaned };
-}
-
-function parseCities(value: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
-  if (value == null || value === "") return { ok: true, value: null };
-  if (typeof value !== "string") return { ok: false, error: "Please check the cities you entered." };
-  const cleaned = cleanLine(value);
-  if (!cleaned) return { ok: true, value: null };
-  if (cleaned.length > 200) return { ok: false, error: "Please shorten the cities list." };
-  if (/[<>]/.test(cleaned)) return { ok: false, error: "Please remove special characters from the cities list." };
   return { ok: true, value: cleaned };
 }
 
@@ -181,8 +161,6 @@ export function parseSubmission(body: unknown): ParseResult {
   if (!area) return { ok: false, error: "Choose the area you’re interested in." };
   const areaOther = parseAreaOther(area, bag.areaOther);
   if (!areaOther.ok) return areaOther;
-  const cities = parseCities(bag.cities);
-  if (!cities.ok) return cities;
   const phone = typeof bag.phone === "string" ? bag.phone : "";
   const phoneProblem = phoneError(phone);
   if (phoneProblem) return { ok: false, error: phoneProblem };
@@ -211,7 +189,6 @@ export function parseSubmission(body: unknown): ParseResult {
       journey,
       area,
       areaOther: areaOther.value,
-      cities: cities.value,
       price,
       preferences,
       financing,

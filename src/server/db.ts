@@ -19,7 +19,6 @@ export type LeadRecord = {
   journey: string;
   area: string;
   areaOther: string | null;
-  cities: string | null;
   priceRange: string;
   preferences: string[];
   financing: string;
@@ -227,7 +226,6 @@ function mapLead(row: Row): LeadRecord {
     journey: text(row, "journey"),
     area: text(row, "area"),
     areaOther: nullable(row, "area_other"),
-    cities: nullable(row, "cities"),
     priceRange: text(row, "price_range"),
     preferences,
     financing: text(row, "financing"),
@@ -292,7 +290,6 @@ export async function saveLead(
     "journey",
     "area",
     "area_other",
-    "cities",
     "price_range",
     "preferences",
     "financing",
@@ -325,7 +322,6 @@ export async function saveLead(
     submission.journey,
     submission.area,
     submission.areaOther,
-    submission.cities,
     submission.price,
     JSON.stringify(submission.preferences),
     submission.financing,

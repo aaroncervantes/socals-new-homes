@@ -81,6 +81,5 @@ export function restoreFunnel(): PersistedFunnel {
   const areaParam = params.get("area");
   if (campaign?.area) prefill.area = campaign.area;
   else if (areaParam && isAreaId(areaParam)) prefill.area = areaParam;
-  if (campaign?.cities) prefill.cities = campaign.cities;
   return createInitial(readAttribution(params), prefill);
 }
