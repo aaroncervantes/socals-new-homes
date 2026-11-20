@@ -122,9 +122,6 @@ export const screens: Screen[] = [
     type: "single",
     field: "financing",
     question: "Are you Pre-Approved for a Home Loan or have Proof of Funds?",
-    description:
-      "Please note, we need a PRE-APPROVED letter prior to any showings. This is a non-negotiable. If you’re looking to just view Homes, please visit our website to see all our latest listings.",
-    descriptionLink: { text: "our website", href: "https://cervantesre.com/" },
     autoAdvance: true,
     options: withLetters([
       { id: "preapproved", label: "Yes, I have been Pre-Approved and I’m Ready" },
