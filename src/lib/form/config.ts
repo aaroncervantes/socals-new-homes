@@ -119,7 +119,7 @@ export const screens: Screen[] = [
     id: "financing",
     type: "single",
     field: "financing",
-    question: "How far are you into the home-buying process?",
+    question: "Has anyone had the chance to go over numbers with you?",
     autoAdvance: true,
     options: withLetters([
       { id: "preapproved", label: "Yes, I have been Pre-Approved and I’m Ready" },
@@ -139,7 +139,7 @@ export const screens: Screen[] = [
       { id: "1-3", label: "Within 1–3 months" },
       { id: "3-6", label: "Within 3–6 months" },
       { id: "6-plus", label: "6+ months" },
-      { id: "exploring", label: "Just exploring" },
+      { id: "exploring", label: "Just looking around" },
     ]),
     cta: "OK",
     next: "first-name",
