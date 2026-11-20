@@ -215,7 +215,7 @@ export function ScreenView({
       ) : null}
 
       {screen.type === "done" ? (
-        <div className="mx-auto mt-10 flex max-w-[34ch] flex-col items-center gap-6 text-center text-[15.5px] leading-relaxed text-ink/85">
+        <div className="mx-auto mt-14 flex max-w-[34ch] flex-col items-center gap-8 text-center text-[15.5px] leading-relaxed text-ink/85">
           {screen.paragraphs?.slice(1).map((paragraph) => (
             <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
           ))}

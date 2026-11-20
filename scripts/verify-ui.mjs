@@ -69,15 +69,19 @@ const viewports = [
   check("progress leaves zero", journeyProgress !== "0%" && journeyProgress !== "0");
   await page.screenshot({ path: `${shots}/journey-390.png` });
   await page.getByTestId("option-ready").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-area").waitFor();
   await page.getByTestId("option-san-bernardino").click();
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-price").waitFor();
   await page.getByTestId("option-200-450").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-financing").waitFor();
   await page.getByTestId("option-preapproved").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-timeline").waitFor();
   await page.getByTestId("option-asap").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-first-name").waitFor();
   await page.getByTestId("screen-first-name").getByTestId("text-input").fill("Alex");
   await page.getByTestId("cta").click();
@@ -111,8 +115,9 @@ const viewports = [
   check(
     "success copy",
     success.includes("God bless you and your family, Thank you for submitting your Inquiry.") &&
-      success.includes("We will be reaching out via Text Message") &&
-      success.includes("Feel free to visit our socials") &&
+      success.includes("We will be reaching out via Text Message to coordinate a scheduled call with us.") &&
+      !success.includes("Please check your inbox") &&
+      !success.includes("socials") &&
       success.includes("socalsnewhomes@cervantesre.com") &&
       mail === "mailto:socalsnewhomes@cervantesre.com" &&
       tel === "tel:+19094066560" &&
@@ -136,6 +141,7 @@ const viewports = [
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-journey").waitFor();
   await page.getByTestId("option-browsing").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-browsing").waitFor();
   check("back branch", (await page.getByTestId("screen-phone").count()) === 0);
   await page.screenshot({ path: `${shots}/browsing-375.png` });
@@ -150,11 +156,15 @@ const viewports = [
   await page.goto(base, { waitUntil: "networkidle" });
   await page.getByTestId("cta").click();
   await page.getByTestId("option-ready").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("option-san-bernardino").click();
   await page.getByTestId("cta").click();
   await page.getByTestId("option-200-450").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("option-preapproved").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("option-asap").click();
+  await page.getByTestId("cta").click();
   await page.getByTestId("screen-first-name").waitFor();
   await page.keyboard.type("Sam");
   await page.keyboard.press("Enter");

@@ -46,7 +46,7 @@ export const screens: Screen[] = [
     type: "single",
     field: "journey",
     question: "Where are you in your home buying journey?",
-    autoAdvance: true,
+    autoAdvance: false,
     options: withLetters([
       { id: "ready", label: "I am ready to buy and need someone to help!" },
       { id: "browsing", label: "I am just browsing for now, just want a list of homes." },
@@ -105,7 +105,7 @@ export const screens: Screen[] = [
     type: "single",
     field: "price",
     question: "What is your Price Range?",
-    autoAdvance: true,
+    autoAdvance: false,
     options: withLetters([
       { id: "200-450", label: "$200k-$450k" },
       { id: "500-750", label: "$500k-$750k" },
@@ -120,7 +120,7 @@ export const screens: Screen[] = [
     type: "single",
     field: "financing",
     question: "Has anyone had the chance to go over numbers with you?",
-    autoAdvance: true,
+    autoAdvance: false,
     options: withLetters([
       { id: "preapproved", label: "Yes, I have been Pre-Approved and I’m Ready" },
       { id: "ready-to-preapprove", label: "No, But I’m ready to get Approved ASAP" },
@@ -133,7 +133,7 @@ export const screens: Screen[] = [
     type: "single",
     field: "timeline",
     question: "When are you hoping to move?",
-    autoAdvance: true,
+    autoAdvance: false,
     options: withLetters([
       { id: "asap", label: "As soon as possible" },
       { id: "1-3", label: "Within 1–3 months" },
@@ -159,8 +159,7 @@ export const screens: Screen[] = [
     type: "done",
     paragraphs: [
       "God bless you and your family, Thank you for submitting your Inquiry.",
-      "We will be reaching out via Text Message to coordinate a scheduled call with us. Please check your inbox and give us a couple days to reach out.",
-      "Feel free to visit our socials to check out homes or see our reviews in the meantime!",
+      "We will be reaching out via Text Message to coordinate a scheduled call with us.",
     ],
     supportEmail: "socalsnewhomes@cervantesre.com",
     showCall: true,

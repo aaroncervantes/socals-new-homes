@@ -158,12 +158,6 @@ export function Funnel() {
     const answers = { ...current.answers, [screen.field]: id } as Answers;
     commit({ ...current, answers });
     setError(null);
-    if (!screen.autoAdvance) return;
-    if (timer.current) window.clearTimeout(timer.current);
-    const field = screen.field;
-    timer.current = window.setTimeout(() => {
-      continueFrom(screen.id, { field, value: id });
-    }, 220);
   }
 
   function setText(value: string) {
