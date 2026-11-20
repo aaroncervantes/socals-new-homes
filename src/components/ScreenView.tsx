@@ -136,9 +136,9 @@ export function ScreenView({
           initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={reduce ? { duration: 0.12 } : settle}
-          className="mb-6"
+          className="mb-2 flex justify-center"
         >
-          <Logo className="h-36 w-36 sm:h-44 sm:w-44" />
+          <Logo className="h-48 w-48 sm:h-56 sm:w-56" />
         </motion.div>
       ) : null}
 
@@ -150,7 +150,14 @@ export function ScreenView({
       ) : null}
 
       {screen.eyebrow ? (
-        <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-clay">{screen.eyebrow}</p>
+        <p
+          className={cn(
+            "text-[13px] font-medium uppercase tracking-[0.18em] text-clay",
+            screen.type === "welcome" && "text-center",
+          )}
+        >
+          {screen.eyebrow}
+        </p>
       ) : null}
 
       {question ? (
@@ -161,7 +168,7 @@ export function ScreenView({
           className={cn(
             "font-serif tracking-[-0.03em] text-ink outline-none",
             screen.type === "welcome"
-              ? "mt-4 text-[2.6rem] leading-[1.05] sm:text-6xl"
+              ? "mt-1 text-center text-[2.6rem] leading-[1.05] sm:text-6xl"
               : "mt-3 text-[1.85rem] leading-[1.15] sm:text-[2.35rem]",
             number == null && !screen.eyebrow ? "mt-0" : "",
           )}
@@ -183,14 +190,6 @@ export function ScreenView({
       ) : null}
 
       {screen.footnote ? <p className="mt-6 text-[15px] text-muted">{screen.footnote}</p> : null}
-
-      {screen.type === "welcome" ? (
-        <p className="mt-4 text-[13px] text-muted">
-          <Link href="/privacy" className="underline decoration-line underline-offset-4">
-            Privacy
-          </Link>
-        </p>
-      ) : null}
 
       {screen.type === "single" && screen.options ? (
         <motion.div

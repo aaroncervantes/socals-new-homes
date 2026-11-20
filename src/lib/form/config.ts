@@ -16,8 +16,8 @@ export const screens: Screen[] = [
     question: "SoCal’s New Homes",
     paragraphs: [
       "Find your next new construction home in Southern California.",
-      "We help buyers discover new communities, builder incentives, quick move-in homes, and opportunities throughout Southern California.",
-      "Answer a few quick questions and we’ll help narrow down the right options for you.",
+      "New communities, incentives, quick move-ins.",
+      "A few questions narrow the options.",
     ],
     footnote: "Takes about 1 minute",
     cta: "Find my home",

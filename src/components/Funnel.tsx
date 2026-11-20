@@ -471,11 +471,21 @@ export function Funnel() {
               disabled={submitting}
               initial={reduce || screen.type !== "welcome" ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              whileTap={reduce || submitting ? undefined : { scale: 0.985 }}
+              whileTap={reduce || submitting ? undefined : { scale: 0.975 }}
               transition={
                 reduce
                   ? { duration: 0.12 }
-                  : { type: "spring", stiffness: 380, damping: 36, mass: 0.8, delay: screen.type === "welcome" ? 0.08 : 0 }
+                  : {
+                      opacity: { type: "spring", stiffness: 420, damping: 42, mass: 0.75 },
+                      y: {
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 42,
+                        mass: 0.75,
+                        delay: screen.type === "welcome" ? 0.06 : 0,
+                      },
+                      scale: { type: "spring", stiffness: 420, damping: 42, mass: 0.75 },
+                    }
               }
               className="h-14 flex-1 rounded-full bg-ink px-5 text-[16.5px] font-medium text-paper disabled:opacity-60"
             >
