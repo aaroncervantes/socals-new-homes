@@ -22,6 +22,7 @@ export type Submission = {
   phoneE164: string;
   journey: QualifiedJourney;
   area: AreaId;
+  areaOther: string | null;
   cities: string | null;
   price: PriceId;
   preferences: PreferenceId[];
@@ -66,6 +67,10 @@ export function validateScreen(screen: Screen, answers: Partial<Answers>): strin
     const value = answers[screen.field];
     const allowed = new Set(screen.options?.map((option) => option.id));
     if (typeof value !== "string" || !allowed.has(value)) return "Please choose an answer.";
+    if (screen.field === "area" && value === "other") {
+      const typed = parseAreaOther("other", answers.areaOther);
+      if (!typed.ok) return typed.error;
+    }
     if (screen.extra) {
       const cities = answers.cities;
       if (typeof cities === "string" && cleanLine(cities).length > 200) {
@@ -97,6 +102,19 @@ export function validateScreen(screen: Screen, answers: Partial<Answers>): strin
 function oneOf<T extends string>(value: unknown, allowed: readonly string[]): T | null {
   if (typeof value !== "string") return null;
   return allowed.includes(value) ? (value as T) : null;
+}
+
+function parseAreaOther(
+  area: string,
+  value: unknown,
+): { ok: true; value: string | null } | { ok: false; error: string } {
+  if (area !== "other") return { ok: true, value: null };
+  if (typeof value !== "string") return { ok: false, error: "Please type the area." };
+  const cleaned = cleanLine(value);
+  if (!cleaned) return { ok: false, error: "Please type the area." };
+  if (cleaned.length > 60) return { ok: false, error: "Please shorten the area." };
+  if (/[<>]/.test(cleaned)) return { ok: false, error: "Please remove special characters from the area." };
+  return { ok: true, value: cleaned };
 }
 
 function parseCities(value: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
@@ -161,6 +179,8 @@ export function parseSubmission(body: unknown): ParseResult {
   if (lastError) return { ok: false, error: lastError };
   const area = oneOf<AreaId>(bag.area, optionIds("area"));
   if (!area) return { ok: false, error: "Choose the area you’re interested in." };
+  const areaOther = parseAreaOther(area, bag.areaOther);
+  if (!areaOther.ok) return areaOther;
   const cities = parseCities(bag.cities);
   if (!cities.ok) return cities;
   const phone = typeof bag.phone === "string" ? bag.phone : "";
@@ -190,6 +210,7 @@ export function parseSubmission(body: unknown): ParseResult {
       phoneE164: e164,
       journey,
       area,
+      areaOther: areaOther.value,
       cities: cities.value,
       price,
       preferences,

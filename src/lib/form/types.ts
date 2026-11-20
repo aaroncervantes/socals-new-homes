@@ -1,11 +1,14 @@
 export type JourneyId = "ready" | "soon" | "researching" | "browsing";
 export type AreaId =
   | "inland-empire"
+  | "san-bernardino"
+  | "riverside"
   | "orange-county"
   | "los-angeles"
   | "san-diego"
   | "high-desert"
-  | "open";
+  | "open"
+  | "other";
 export type PriceId = "under-500" | "500-650" | "650-800" | "800-1m" | "1m-plus" | "unsure";
 export type FinancingId = "preapproved" | "ready-to-preapprove" | "cash" | "figuring-out";
 export type TimelineId = "asap" | "1-3" | "3-6" | "6-plus" | "exploring";
@@ -31,6 +34,7 @@ export type Answers = {
   firstName?: string;
   lastName?: string;
   area?: AreaId;
+  areaOther?: string;
   cities?: string;
   phone?: string;
   price?: PriceId;
@@ -71,6 +75,7 @@ export type Screen = {
   autoAdvance?: boolean;
   options?: Option[];
   extra?: { field: "cities"; label: string; placeholder: string };
+  reveal?: { when: string; field: "areaOther"; label: string; placeholder: string };
   next?: string;
   branchingRules?: { when: string; next: string }[];
   cta?: string;

@@ -33,6 +33,7 @@ export function crmPayload(lead: LeadRecord): Record<string, string> {
     leadClassification: classificationLabel(lead.classification),
     buyingJourney: answerLabel("journey", lead.journey),
     area: answerLabel("area", lead.area),
+    areaOther: lead.areaOther ?? "",
     cities: lead.cities ?? "",
     budget: answerLabel("price", lead.priceRange),
     homePreferences: lead.preferences.map((id) => answerLabel("preferences", id)).join(", "),

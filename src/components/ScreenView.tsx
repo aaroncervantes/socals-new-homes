@@ -1,8 +1,10 @@
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { CONSENT_TEXT } from "@/lib/consent";
 import { fillCopy } from "@/lib/form/copy";
 import type { Answers, Option, Screen } from "@/lib/form/types";
 import { cn } from "@/lib/cn";
+import { Logo } from "@/components/Logo";
 import { SocialLinks, TextUs } from "@/components/SocialLinks";
 
 type Props = {
@@ -14,9 +16,12 @@ type Props = {
   onMulti: (id: string) => void;
   onText: (value: string) => void;
   onCities: (value: string) => void;
+  onAreaOther: (value: string) => void;
   onConsent: (value: boolean) => void;
   onRestart: () => void;
 };
+
+const settle = { type: "spring" as const, stiffness: 420, damping: 42, mass: 0.75 };
 
 function groupsOf(options: Option[]): Array<{ name: string; options: Option[] }> {
   const groups: Array<{ name: string; options: Option[] }> = [];
@@ -40,29 +45,39 @@ function ChoiceButton({
   pressed: boolean;
   onClick: () => void;
 }) {
+  const reduce = useReducedMotion() === true;
   return (
-    <button
+    <motion.button
       type="button"
       role={pressed ? "radio" : undefined}
       aria-checked={pressed ? selected : undefined}
       aria-pressed={pressed ? undefined : selected}
       data-testid={`option-${option.id}`}
       onClick={onClick}
+      variants={{
+        hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : 10 },
+        show: { opacity: 1, y: 0, transition: reduce ? { duration: 0.12 } : settle },
+      }}
+      whileTap={reduce ? undefined : { scale: 0.975 }}
+      transition={reduce ? { duration: 0.12 } : settle}
       className={cn(
         "flex min-h-14 w-full items-center gap-3 rounded-2xl border px-3.5 py-3 text-left text-[16.5px] leading-snug",
-        "transition-transform duration-75 ease-out active:scale-[0.985]",
+        "transition-colors duration-200 ease-out motion-reduce:transition-none",
         selected ? "border-ink bg-ink text-paper" : "border-line bg-card text-ink",
       )}
     >
       {option.letter ? (
-        <span
+        <motion.span
+          aria-hidden={false}
+          animate={{ scale: selected && !reduce ? 1 : 0.96 }}
+          transition={reduce ? { duration: 0.12 } : settle}
           className={cn(
             "grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[13px] font-medium",
             selected ? "border-white/35 text-paper" : "border-line text-ink",
           )}
         >
           {option.letter}
-        </span>
+        </motion.span>
       ) : (
         <span
           className={cn(
@@ -79,7 +94,7 @@ function ChoiceButton({
         </span>
       )}
       <span>{option.label}</span>
-    </button>
+    </motion.button>
   );
 }
 
@@ -92,21 +107,41 @@ export function ScreenView({
   onMulti,
   onText,
   onCities,
+  onAreaOther,
   onConsent,
   onRestart,
 }: Props) {
+  const reduce = useReducedMotion() === true;
   const titleId = `${screen.id}-title`;
   const inputId = `${screen.id}-answer`;
   const errorId = `${screen.id}-error`;
   const question = screen.question ? fillCopy(screen.question, answers) : "";
   const selectedSingle = screen.field ? answers[screen.field] : undefined;
+  const showOther = Boolean(screen.reveal && selectedSingle === screen.reveal.when);
   const textValue =
     screen.field === "firstName" || screen.field === "lastName" || screen.field === "phone"
       ? (answers[screen.field] ?? "")
       : "";
+  const list = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: reduce ? 0 : 0.028, delayChildren: reduce ? 0 : 0.02 },
+    },
+  };
 
   return (
     <div data-testid={`screen-${screen.id}`}>
+      {screen.type === "welcome" ? (
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={reduce ? { duration: 0.12 } : settle}
+          className="mb-6"
+        >
+          <Logo className="h-36 w-36 sm:h-44 sm:w-44" />
+        </motion.div>
+      ) : null}
+
       {number != null ? (
         <p className="text-[13px] font-medium tracking-[0.14em] text-clay">
           <span>{number}</span>
@@ -158,7 +193,14 @@ export function ScreenView({
       ) : null}
 
       {screen.type === "single" && screen.options ? (
-        <div role="radiogroup" aria-labelledby={titleId} className="mt-8 flex flex-col gap-2.5">
+        <motion.div
+          role="radiogroup"
+          aria-labelledby={titleId}
+          className="mt-8 flex flex-col gap-2.5"
+          initial="hidden"
+          animate="show"
+          variants={list}
+        >
           {screen.options.map((option) => (
             <ChoiceButton
               key={option.id}
@@ -168,8 +210,33 @@ export function ScreenView({
               onClick={() => onSingle(option.id)}
             />
           ))}
-        </div>
+        </motion.div>
       ) : null}
+
+      <AnimatePresence initial={false}>
+        {showOther && screen.reveal ? (
+          <motion.label
+            key="area-other"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
+            transition={reduce ? { duration: 0.12 } : settle}
+            className="mt-5 block"
+          >
+            <span className="text-[15px] text-muted">{screen.reveal.label}</span>
+            <input
+              data-testid="area-other-input"
+              value={answers.areaOther ?? ""}
+              placeholder={screen.reveal.placeholder}
+              maxLength={60}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? errorId : undefined}
+              onChange={(event) => onAreaOther(event.target.value)}
+              className="mt-2 w-full border-0 border-b border-ink/25 bg-transparent py-2 text-[18px] text-ink outline-none placeholder:text-[#8a847c] focus:border-ink"
+            />
+          </motion.label>
+        ) : null}
+      </AnimatePresence>
 
       {screen.extra ? (
         <label className="mt-6 block">
@@ -208,7 +275,14 @@ export function ScreenView({
       ) : null}
 
       {screen.type === "multi" && screen.options ? (
-        <div role="group" aria-labelledby={titleId} className="mt-8">
+        <motion.div
+          role="group"
+          aria-labelledby={titleId}
+          className="mt-8"
+          initial="hidden"
+          animate="show"
+          variants={list}
+        >
           {groupsOf(screen.options).map((group) => (
             <div key={group.name || "options"} className="mt-5 first:mt-0">
               {group.name ? (
@@ -229,7 +303,7 @@ export function ScreenView({
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
       ) : null}
 
       {screen.type === "confirm" ? (

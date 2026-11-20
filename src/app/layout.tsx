@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   description,
   applicationName: "SoCal’s New Homes",
   alternates: { canonical: "/" },
+  icons: {
+    icon: [{ url: "/brand/logo.png", type: "image/png" }],
+    apple: [{ url: "/brand/logo.png", type: "image/png" }],
+  },
   openGraph: {
     title,
     description,
@@ -33,8 +37,14 @@ export const metadata: Metadata = {
     siteName: "SoCal’s New Homes",
     type: "website",
     locale: "en_US",
+    images: [{ url: "/brand/logo.png", width: 1254, height: 1254, alt: "SoCal’s New Homes" }],
   },
-  twitter: { card: "summary_large_image", title, description },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/brand/logo.png"],
+  },
   robots: { index: true, follow: true },
 };
 

@@ -95,12 +95,21 @@ export const screens: Screen[] = [
     autoAdvance: false,
     options: withLetters([
       { id: "inland-empire", label: "Inland Empire" },
+      { id: "san-bernardino", label: "San Bernardino County" },
+      { id: "riverside", label: "Riverside" },
       { id: "orange-county", label: "Orange County" },
       { id: "los-angeles", label: "Los Angeles County" },
       { id: "san-diego", label: "San Diego County" },
       { id: "high-desert", label: "High Desert" },
       { id: "open", label: "I’m open to different areas" },
+      { id: "other", label: "Other" },
     ]),
+    reveal: {
+      when: "other",
+      field: "areaOther",
+      label: "Which area?",
+      placeholder: "Type an area",
+    },
     extra: {
       field: "cities",
       label: "Any specific cities you’re interested in?",

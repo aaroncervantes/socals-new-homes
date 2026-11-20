@@ -103,6 +103,22 @@ test("submission accepts a low budget and rejects a browser payload", () => {
   assert.equal(noConsent.ok, false);
 });
 
+test("other area stores a short typed value and ignores it otherwise", () => {
+  const missing = parseSubmission(payload({ ...qualified, area: "other", areaOther: "   " }));
+  assert.equal(missing.ok, false);
+  const typed = parseSubmission(payload({ ...qualified, area: "other", areaOther: "Temecula" }));
+  assert.equal(typed.ok, true);
+  if (typed.ok) {
+    assert.equal(typed.value.area, "other");
+    assert.equal(typed.value.areaOther, "Temecula");
+  }
+  const listed = parseSubmission(payload({ ...qualified, area: "riverside", areaOther: "Temecula" }));
+  assert.equal(listed.ok, true);
+  if (listed.ok) assert.equal(listed.value.areaOther, null);
+  const long = parseSubmission(payload({ ...qualified, area: "other", areaOther: "x".repeat(61) }));
+  assert.equal(long.ok, false);
+});
+
 test("campaign presets prefill inland empire cities", () => {
   assert.equal(getCampaign("Corona")?.cities, "Corona");
   assert.equal(getCampaign("rancho-cucamonga")?.area, "inland-empire");

@@ -77,6 +77,7 @@ test("a lead is stored once, email and CRM are skipped without credentials", asy
   assert.equal(row.classification, "nurture_lead");
   assert.deepEqual(row.preferences, ["adu"]);
   assert.equal(row.cities, null);
+  assert.equal(row.areaOther, null);
   assert.equal(row.consent, true);
   assert.equal(row.consentVersion, CONSENT_VERSION);
   assert.equal(row.utmSource, "facebook");

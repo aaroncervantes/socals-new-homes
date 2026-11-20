@@ -202,6 +202,13 @@ export function Funnel() {
     setError(null);
   }
 
+  function setAreaOther(value: string) {
+    const current = stateRef.current;
+    if (!current) return;
+    commit({ ...current, answers: { ...current.answers, areaOther: value.slice(0, 60) } });
+    setError(null);
+  }
+
   function setConsent(value: boolean) {
     const current = stateRef.current;
     if (!current) return;
@@ -268,6 +275,7 @@ export function Funnel() {
             firstName: current.answers.firstName,
             lastName: current.answers.lastName,
             area: current.answers.area,
+            areaOther: current.answers.areaOther ?? "",
             cities: current.answers.cities ?? "",
             phone: current.answers.phone,
             price: current.answers.price,
@@ -390,11 +398,16 @@ export function Funnel() {
             ref={scrollRef}
             custom={direction}
             variants={{
-              enter: (dir: number) => ({ opacity: 0, x: reduce ? 0 : dir * 28 }),
-              center: { opacity: 1, x: 0 },
+              enter: (dir: number) => ({
+                opacity: 0,
+                x: reduce ? 0 : dir * 32,
+                y: reduce ? 0 : 8,
+              }),
+              center: { opacity: 1, x: 0, y: 0 },
               exit: (dir: number) => ({
                 opacity: 0,
-                x: reduce ? 0 : dir * -28,
+                x: reduce ? 0 : dir * -24,
+                y: reduce ? 0 : -6,
                 pointerEvents: "none" as const,
               }),
             }}
@@ -403,8 +416,8 @@ export function Funnel() {
             exit="exit"
             transition={
               reduce
-                ? { duration: 0.18, ease: "easeOut" }
-                : { type: "spring", stiffness: 420, damping: 40, mass: 0.8 }
+                ? { duration: 0.16, ease: "easeOut" }
+                : { type: "spring", stiffness: 380, damping: 40, mass: 0.8 }
             }
             className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-y-contain"
           >
@@ -418,6 +431,7 @@ export function Funnel() {
                 onMulti={togglePreference}
                 onText={setText}
                 onCities={setCities}
+                onAreaOther={setAreaOther}
                 onConsent={setConsent}
                 onRestart={restart}
               />
@@ -436,26 +450,37 @@ export function Funnel() {
         >
           <div className="mx-auto flex w-full max-w-[640px] items-center gap-3">
             {state.history.length > 1 ? (
-              <button
+              <motion.button
                 type="button"
                 data-testid="back"
                 aria-label="Back"
                 onClick={goBack}
-                className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-line bg-card text-ink active:scale-[0.98]"
+                whileTap={reduce ? undefined : { scale: 0.96 }}
+                transition={reduce ? { duration: 0.12 } : { type: "spring", stiffness: 500, damping: 40, mass: 0.7 }}
+                className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-line bg-card text-ink"
               >
                 <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" fill="none">
                   <path d="M11.5 3.5 6 9l5.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </button>
+              </motion.button>
             ) : null}
-            <button
+            <motion.button
+              key={screen.type === "welcome" ? "welcome-cta" : "step-cta"}
               type="submit"
               data-testid="cta"
               disabled={submitting}
-              className="h-14 flex-1 rounded-full bg-ink px-5 text-[16.5px] font-medium text-paper active:scale-[0.99] disabled:opacity-60"
+              initial={reduce || screen.type !== "welcome" ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileTap={reduce || submitting ? undefined : { scale: 0.985 }}
+              transition={
+                reduce
+                  ? { duration: 0.12 }
+                  : { type: "spring", stiffness: 380, damping: 36, mass: 0.8, delay: screen.type === "welcome" ? 0.08 : 0 }
+              }
+              className="h-14 flex-1 rounded-full bg-ink px-5 text-[16.5px] font-medium text-paper disabled:opacity-60"
             >
               {cta}
-            </button>
+            </motion.button>
           </div>
         </div>
       ) : null}

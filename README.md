@@ -54,7 +54,7 @@ Copy `.env.example`. Nothing in that file is a secret. Do not commit `.env`.
 | `NEXT_PUBLIC_SITE_URL` | Yes, before the production build | Canonical origin, no trailing slash. |
 | `NEXT_PUBLIC_INSTAGRAM_URL` | Yes, before public launch | HTTPS profile URL. Blank shows a labeled placeholder. |
 | `NEXT_PUBLIC_FACEBOOK_URL` | Yes, before public launch | HTTPS profile URL. Blank shows a labeled placeholder. |
-| `NEXT_PUBLIC_LOGO_SRC` | Yes, before public launch | `/brand/logo.svg` or an HTTPS URL. Blank shows a wordmark. |
+| `NEXT_PUBLIC_LOGO_SRC` | No | Optional override. Blank uses `/brand/logo.png`. |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | No | GA4 id (`G-…`). Events stay free of name and phone. |
 | `NEXT_PUBLIC_META_PIXEL_ID` | No | Numeric Meta Pixel id. |
 | `RATE_LIMIT_MAX` | No | Lead posts per IP per hour. Default 8. |
@@ -62,7 +62,7 @@ Copy `.env.example`. Nothing in that file is a secret. Do not commit `.env`.
 
 Email is skipped, and the lead is still saved, when any of the three email variables is missing. CRM is skipped when GoHighLevel is not configured. A database failure does not show the thank-you screen.
 
-The webhook receives a flat JSON object: firstName, lastName, phone, source (`SoCal’s New Homes Website`), leadClassification, buyingJourney, area, cities, budget, homePreferences, financing, timeline, utmSource, utmMedium, utmCampaign, submittedAt.
+The webhook receives a flat JSON object: firstName, lastName, phone, source (`SoCal’s New Homes Website`), leadClassification, buyingJourney, area, areaOther, cities, budget, homePreferences, financing, timeline, utmSource, utmMedium, utmCampaign, submittedAt.
 
 ## Analytics
 
@@ -76,11 +76,9 @@ UTM parameters from the landing URL are kept for the whole visit and saved on th
 
 ## Brand and legal placeholders
 
-There is no approved logo, Instagram URL, Facebook URL, DRE number, brokerage name, or legal entity in this project. `src/components/Logo.tsx` renders a wordmark until `NEXT_PUBLIC_LOGO_SRC` is set. Put the file at `public/brand/logo.svg`.
+The approved mark is `public/brand/logo.png`. It is the welcome mark, the favicon, and the Open Graph image. Instagram URL, Facebook URL, DRE number, brokerage name, and legal entity are still not on file.
 
 `/privacy`, `/terms`, and `/disclosures` are drafts. They are noindex. They list the facts this app actually collects and the blanks the owner still has to fill. Do not advertise the site until counsel replaces them.
-
-The favicon and social card are typographic placeholders, not a logo.
 
 ## Deployment
 

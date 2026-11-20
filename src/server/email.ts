@@ -42,6 +42,7 @@ function lines(lead: LeadRecord): Array<[string, string]> {
     ["Classification", classificationLabel(lead.classification)],
     ["Buying stage", answerLabel("journey", lead.journey)],
     ["Area", answerLabel("area", lead.area)],
+    ["Typed area", dash(lead.areaOther)],
     ["Cities", dash(lead.cities)],
     ["Budget", answerLabel("price", lead.priceRange)],
     ["Home preferences", preferences || "—"],

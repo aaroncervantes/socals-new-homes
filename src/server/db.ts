@@ -18,6 +18,7 @@ export type LeadRecord = {
   phoneE164: string;
   journey: string;
   area: string;
+  areaOther: string | null;
   cities: string | null;
   priceRange: string;
   preferences: string[];
@@ -59,6 +60,7 @@ const SCHEMA = [
     phone_e164 TEXT NOT NULL,
     journey TEXT NOT NULL,
     area TEXT NOT NULL,
+    area_other TEXT,
     cities TEXT,
     price_range TEXT NOT NULL,
     preferences TEXT NOT NULL,
@@ -147,6 +149,14 @@ async function applySchema(connection: Connection): Promise<void> {
     if (connection.kind === "sqlite") connection.db.exec(statement);
     else await connection.pool.query(statement);
   }
+  if (connection.kind === "sqlite") {
+    const columns = connection.db.prepare("PRAGMA table_info(leads)").all() as Array<{ name: string }>;
+    if (!columns.some((column) => column.name === "area_other")) {
+      connection.db.exec("ALTER TABLE leads ADD COLUMN area_other TEXT");
+    }
+    return;
+  }
+  await connection.pool.query("ALTER TABLE leads ADD COLUMN IF NOT EXISTS area_other TEXT");
 }
 
 function connection(): Promise<Connection> {
@@ -216,6 +226,7 @@ function mapLead(row: Row): LeadRecord {
     phoneE164: text(row, "phone_e164"),
     journey: text(row, "journey"),
     area: text(row, "area"),
+    areaOther: nullable(row, "area_other"),
     cities: nullable(row, "cities"),
     priceRange: text(row, "price_range"),
     preferences,
@@ -280,6 +291,7 @@ export async function saveLead(
     "phone_e164",
     "journey",
     "area",
+    "area_other",
     "cities",
     "price_range",
     "preferences",
@@ -312,6 +324,7 @@ export async function saveLead(
     submission.phoneE164,
     submission.journey,
     submission.area,
+    submission.areaOther,
     submission.cities,
     submission.price,
     JSON.stringify(submission.preferences),

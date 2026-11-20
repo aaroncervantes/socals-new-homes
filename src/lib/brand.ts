@@ -21,7 +21,6 @@ export const brand = {
 };
 
 export const requiredBrandAssets = [
-  "Approved logo file, then set NEXT_PUBLIC_LOGO_SRC (for example /brand/logo.svg).",
   "Instagram profile URL (NEXT_PUBLIC_INSTAGRAM_URL). None is on file.",
   "Facebook profile URL (NEXT_PUBLIC_FACEBOOK_URL). None is on file.",
 ] as const;
