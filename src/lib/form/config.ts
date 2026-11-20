@@ -48,7 +48,7 @@ export const screens: Screen[] = [
     question: "Where are you in your home buying journey?",
     autoAdvance: true,
     options: withLetters([
-      { id: "ready", label: "I am ready to buy and need an agent to help!" },
+      { id: "ready", label: "I am ready to buy and need someone to help!" },
       { id: "browsing", label: "I am just browsing for now, just want a list of homes." },
     ]),
     branchingRules: [
