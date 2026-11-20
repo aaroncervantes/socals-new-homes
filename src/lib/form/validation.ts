@@ -3,7 +3,7 @@ import { CONSENT_VERSION } from "@/lib/consent";
 import { intEnv } from "@/lib/env";
 import { getScreen, optionIds } from "@/lib/form/config";
 import { formatUsPhone, phoneError, toE164 } from "@/lib/form/phone";
-import type { Answers, AreaId, FinancingId, JourneyId, PreferenceId, PriceId, Screen, TimelineId } from "@/lib/form/types";
+import type { Answers, AreaId, FinancingId, JourneyId, PriceId, Screen, TimelineId } from "@/lib/form/types";
 
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -24,7 +24,6 @@ export type Submission = {
   area: AreaId;
   areaOther: string | null;
   price: PriceId;
-  preferences: PreferenceId[];
   financing: FinancingId;
   timeline: TimelineId;
   consent: true;
@@ -73,14 +72,6 @@ export function validateScreen(screen: Screen, answers: Partial<Answers>): strin
     return null;
   }
 
-  if (screen.type === "multi") {
-    const values = answers.preferences;
-    const allowed = new Set(optionIds("preferences"));
-    if (!values || values.length === 0) return "Choose at least one option.";
-    if (values.some((id) => !allowed.has(id))) return "Choose at least one option.";
-    return null;
-  }
-
   if (screen.type === "confirm") {
     if (answers.consent !== true) return "Please agree to be contacted so we can follow up.";
     return null;
@@ -105,18 +96,6 @@ function parseAreaOther(
   if (cleaned.length > 60) return { ok: false, error: "Please shorten the area." };
   if (/[<>]/.test(cleaned)) return { ok: false, error: "Please remove special characters from the area." };
   return { ok: true, value: cleaned };
-}
-
-function parsePreferences(value: unknown): PreferenceId[] | null {
-  if (!Array.isArray(value) || value.length === 0 || value.length > 20) return null;
-  const allowed = new Set(optionIds("preferences"));
-  const ids: PreferenceId[] = [];
-  for (const item of value) {
-    if (typeof item !== "string" || !allowed.has(item) || ids.includes(item as PreferenceId)) return null;
-    ids.push(item as PreferenceId);
-  }
-  if (ids.includes("unsure") && ids.length > 1) return ids.filter((id) => id !== "unsure");
-  return ids;
 }
 
 export function parseSubmission(body: unknown): ParseResult {
@@ -166,8 +145,6 @@ export function parseSubmission(body: unknown): ParseResult {
   if (phoneProblem) return { ok: false, error: phoneProblem };
   const price = oneOf<PriceId>(bag.price, optionIds("price"));
   if (!price) return { ok: false, error: "Choose a price range." };
-  const preferences = parsePreferences(bag.preferences);
-  if (!preferences) return { ok: false, error: "Choose at least one home preference." };
   const financing = oneOf<FinancingId>(bag.financing, optionIds("financing"));
   if (!financing) return { ok: false, error: "Tell us where financing stands." };
   const timeline = oneOf<TimelineId>(bag.timeline, optionIds("timeline"));
@@ -190,7 +167,6 @@ export function parseSubmission(body: unknown): ParseResult {
       area,
       areaOther: areaOther.value,
       price,
-      preferences,
       financing,
       timeline,
       consent: true,

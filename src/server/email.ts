@@ -35,7 +35,6 @@ function dash(value: string | null): string {
 }
 
 function lines(lead: LeadRecord): Array<[string, string]> {
-  const preferences = lead.preferences.map((id) => answerLabel("preferences", id)).join(", ");
   return [
     ["Name", `${lead.firstName} ${lead.lastName}`],
     ["Phone", lead.phoneDisplay],
@@ -44,7 +43,6 @@ function lines(lead: LeadRecord): Array<[string, string]> {
     ["Area", answerLabel("area", lead.area)],
     ["Typed area", dash(lead.areaOther)],
     ["Budget", answerLabel("price", lead.priceRange)],
-    ["Home preferences", preferences || "—"],
     ["Financing", answerLabel("financing", lead.financing)],
     ["Timeline", answerLabel("timeline", lead.timeline)],
     ["Lead source", "SoCal’s New Homes Website"],

@@ -20,7 +20,6 @@ export type LeadRecord = {
   area: string;
   areaOther: string | null;
   priceRange: string;
-  preferences: string[];
   financing: string;
   timeline: string;
   classification: string;
@@ -62,7 +61,7 @@ const SCHEMA = [
     area_other TEXT,
     cities TEXT,
     price_range TEXT NOT NULL,
-    preferences TEXT NOT NULL,
+    preferences TEXT,
     financing TEXT NOT NULL,
     timeline TEXT NOT NULL,
     classification TEXT NOT NULL,
@@ -156,6 +155,7 @@ async function applySchema(connection: Connection): Promise<void> {
     return;
   }
   await connection.pool.query("ALTER TABLE leads ADD COLUMN IF NOT EXISTS area_other TEXT");
+  await connection.pool.query("ALTER TABLE leads ALTER COLUMN preferences DROP NOT NULL");
 }
 
 function connection(): Promise<Connection> {
@@ -208,13 +208,6 @@ function nullable(row: Row, key: string): string | null {
 }
 
 function mapLead(row: Row): LeadRecord {
-  let preferences: string[] = [];
-  try {
-    const parsed: unknown = JSON.parse(text(row, "preferences") || "[]");
-    if (Array.isArray(parsed)) preferences = parsed.filter((item) => typeof item === "string");
-  } catch {
-    preferences = [];
-  }
   return {
     id: text(row, "id"),
     idempotencyKey: text(row, "idempotency_key"),
@@ -227,7 +220,6 @@ function mapLead(row: Row): LeadRecord {
     area: text(row, "area"),
     areaOther: nullable(row, "area_other"),
     priceRange: text(row, "price_range"),
-    preferences,
     financing: text(row, "financing"),
     timeline: text(row, "timeline"),
     classification: text(row, "classification"),
@@ -291,7 +283,6 @@ export async function saveLead(
     "area",
     "area_other",
     "price_range",
-    "preferences",
     "financing",
     "timeline",
     "classification",
@@ -323,7 +314,6 @@ export async function saveLead(
     submission.area,
     submission.areaOther,
     submission.price,
-    JSON.stringify(submission.preferences),
     submission.financing,
     submission.timeline,
     classification,

@@ -35,7 +35,6 @@ export function crmPayload(lead: LeadRecord): Record<string, string> {
     area: answerLabel("area", lead.area),
     areaOther: lead.areaOther ?? "",
     budget: answerLabel("price", lead.priceRange),
-    homePreferences: lead.preferences.map((id) => answerLabel("preferences", id)).join(", "),
     financing: answerLabel("financing", lead.financing),
     timeline: answerLabel("timeline", lead.timeline),
     utmSource: lead.utmSource ?? "",

@@ -16,8 +16,7 @@ const qualified: Answers = {
   lastName: "Rivera",
   area: "san-bernardino",
   phone: "(909) 555-0199",
-  price: "under-650",
-  preferences: ["beds-3", "quick-move-in"],
+  price: "200-450",
   financing: "preapproved",
   timeline: "asap",
   consent: true,
@@ -31,36 +30,37 @@ test("qualified path matches the written question order", () => {
   const path = buildPath({ journey: "ready" });
   assert.deepEqual(path, [
     "welcome",
-    "journey",
     "first-name",
     "last-name",
+    "journey",
     "area",
     "phone",
     "price",
-    "preferences",
     "financing",
     "timeline",
     "confirm",
     "success",
   ]);
-  assert.equal(questionNumber("journey", { journey: "ready" }), 1);
+  assert.equal(questionNumber("first-name", { journey: "ready" }), 1);
+  assert.equal(questionNumber("last-name", { journey: "ready" }), 2);
+  assert.equal(questionNumber("journey", { journey: "ready" }), 3);
   assert.equal(questionNumber("area", { journey: "ready" }), 4);
-  assert.equal(questionNumber("confirm", { journey: "ready" }), 10);
+  assert.equal(questionNumber("confirm", { journey: "ready" }), 9);
   assert.equal(progressFor("welcome", { journey: "ready" }), 0);
   assert.equal(progressFor("success", { journey: "ready" }), 1);
 });
 
 test("browsing path stays out of the buyer questions", () => {
   const path = buildPath({ journey: "browsing" });
-  assert.deepEqual(path, ["welcome", "journey", "browsing", "browsing-done"]);
+  assert.deepEqual(path, ["welcome", "first-name", "last-name", "journey", "browsing"]);
   assert.equal(path.includes("phone"), false);
-  assert.equal(progressFor("browsing-done", { journey: "browsing" }), 1);
+  assert.equal(progressFor("browsing", { journey: "browsing" }), 1);
   assert.equal(
-    isValidHistory(["welcome", "journey", "browsing"], { journey: "browsing" }),
+    isValidHistory(["welcome", "first-name", "last-name", "journey", "browsing"], { journey: "browsing" }),
     true,
   );
   assert.equal(
-    isValidHistory(["welcome", "journey", "first-name"], { journey: "browsing" }),
+    isValidHistory(["welcome", "journey", "browsing"], { journey: "browsing" }),
     false,
   );
 });
@@ -92,7 +92,7 @@ test("submission accepts a low budget and rejects a browser payload", () => {
   const ok = parseSubmission(payload(qualified));
   assert.equal(ok.ok, true);
   if (ok.ok) {
-    assert.equal(ok.value.price, "under-650");
+    assert.equal(ok.value.price, "200-450");
     assert.equal(ok.value.phoneE164, "+19095550199");
     assert.equal("cities" in ok.value, false);
   }

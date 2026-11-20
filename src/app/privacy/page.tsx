@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         down repeated submissions.
       </p>
       <p>
-        Choosing “I’m just browsing for now” does not create a lead, does not email the owner, and
+        Choosing “I am just browsing for now, just want a list of homes.” does not create a lead, does not email the owner, and
         does not create a CRM contact. Progress before you submit is saved in this browser only, so
         a refresh does not clear the form. That local copy is removed after a successful submit.
       </p>

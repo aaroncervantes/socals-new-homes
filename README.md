@@ -20,10 +20,10 @@ npm start
 ## What a visitor does
 
 1. Welcome
-2. Buying journey
-3. If they are just browsing, they get a short follow-us screen and no contact form
-4. Otherwise: first name, last name, area, phone, price, home preferences, financing, timeline, consent, submit
-5. Success, with the text line (909) 406-6560
+2. First name, last name, then buying journey
+3. If they are just browsing, they get a short note and a link to the homes site. No lead is saved
+4. Otherwise: area, phone, price, financing, timeline, consent, submit
+5. Success
 
 Back follows the path they actually took. Progress is based on that path, not on every question in the file. Refresh restores an unfinished funnel from this browser. A successful submit clears that local copy. Nothing is a lead until submit.
 
@@ -31,7 +31,7 @@ Back follows the path they actually took. Progress is based on that path, not on
 
 Defined in `src/lib/form/classification.ts`.
 
-- `browser` — “just browsing.” Nothing is stored as a lead, emailed, or sent to a CRM.
+- `browser` — just browsing. Nothing is stored as a lead, emailed, or sent to a CRM.
 - `nurture_lead` — researching, or planning to buy in 3–6 months but the timeline answer is 6+ months or just exploring.
 - `qualified_lead` — ready to buy (any timeline), or planning to buy in 3–6 months with any nearer timeline.
 

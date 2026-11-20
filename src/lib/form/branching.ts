@@ -43,7 +43,7 @@ export function isValidHistory(history: string[], answers: Partial<Answers>): bo
   for (let index = 0; index < history.length - 1; index += 1) {
     const current = history[index];
     if (!current) return false;
-    const expected = current === "welcome" ? "journey" : resolveNext(current, answers);
+    const expected = resolveNext(current, answers);
     if (expected !== history[index + 1]) return false;
   }
   return true;

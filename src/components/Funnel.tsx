@@ -167,24 +167,6 @@ export function Funnel() {
     }, 160);
   }
 
-  function togglePreference(id: string) {
-    const current = stateRef.current;
-    if (!current) return;
-    const existing = current.answers.preferences ?? [];
-    let preferences: Answers["preferences"];
-    if (id === "unsure") preferences = existing.length === 1 && existing[0] === "unsure" ? [] : ["unsure"];
-    else if (existing.some((item) => item === id)) {
-      preferences = existing.filter((item) => item !== id);
-    } else {
-      preferences = [...existing.filter((item) => item !== "unsure"), id as NonNullable<Answers["preferences"]>[number]];
-    }
-    commit({
-      ...current,
-      answers: { ...current.answers, preferences: preferences as Answers["preferences"] },
-    });
-    setError(null);
-  }
-
   function setText(value: string) {
     const current = stateRef.current;
     if (!current) return;
@@ -271,7 +253,6 @@ export function Funnel() {
             areaOther: current.answers.areaOther ?? "",
             phone: current.answers.phone,
             price: current.answers.price,
-            preferences: current.answers.preferences ?? [],
             financing: current.answers.financing,
             timeline: current.answers.timeline,
           },
@@ -290,7 +271,7 @@ export function Funnel() {
       const success: PersistedFunnel = { ...current, history: ["success"] };
       stateRef.current = success;
       setState(success);
-      document.title = `Thank you, ${current.answers.firstName ?? ""} · SoCal’s New Homes`;
+      document.title = "Thank you · SoCal’s New Homes";
     } catch (submitError) {
       setError(
         submitError instanceof Error
@@ -420,7 +401,6 @@ export function Funnel() {
                 number={number}
                 error={error}
                 onSingle={chooseSingle}
-                onMulti={togglePreference}
                 onText={setText}
                 onAreaOther={setAreaOther}
                 onConsent={setConsent}
@@ -455,6 +435,18 @@ export function Funnel() {
                 </svg>
               </motion.button>
             ) : null}
+            {screen.href ? (
+              <motion.a
+                key="step-link"
+                href={screen.href}
+                data-testid="cta"
+                whileTap={reduce ? undefined : { scale: 0.975 }}
+                transition={reduce ? { duration: 0.12 } : { type: "spring", stiffness: 420, damping: 42, mass: 0.75 }}
+                className="grid h-14 flex-1 place-items-center rounded-full bg-ink px-5 text-[16.5px] font-medium text-paper"
+              >
+                {cta}
+              </motion.a>
+            ) : (
             <motion.button
               key={screen.type === "welcome" ? "welcome-cta" : "step-cta"}
               type="submit"
@@ -482,6 +474,7 @@ export function Funnel() {
             >
               {cta}
             </motion.button>
+            )}
           </div>
         </div>
       ) : null}

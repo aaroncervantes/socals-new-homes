@@ -13,7 +13,6 @@ type Props = {
   number: number | null;
   error: string | null;
   onSingle: (id: string) => void;
-  onMulti: (id: string) => void;
   onText: (value: string) => void;
   onAreaOther: (value: string) => void;
   onConsent: (value: boolean) => void;
@@ -22,15 +21,24 @@ type Props = {
 
 const settle = { type: "spring" as const, stiffness: 420, damping: 42, mass: 0.75 };
 
-function groupsOf(options: Option[]): Array<{ name: string; options: Option[] }> {
-  const groups: Array<{ name: string; options: Option[] }> = [];
-  for (const option of options) {
-    const name = option.group ?? "";
-    const last = groups[groups.length - 1];
-    if (!last || last.name !== name) groups.push({ name, options: [option] });
-    else last.options.push(option);
-  }
-  return groups;
+function LinkedCopy({
+  text,
+  link,
+}: {
+  text: string;
+  link?: { text: string; href: string };
+}) {
+  if (!link || !text.includes(link.text)) return text;
+  const [before, after] = text.split(link.text);
+  return (
+    <>
+      {before}
+      <a href={link.href} className="underline underline-offset-4">
+        {link.text}
+      </a>
+      {after}
+    </>
+  );
 }
 
 function ChoiceButton({
@@ -103,7 +111,6 @@ export function ScreenView({
   number,
   error,
   onSingle,
-  onMulti,
   onText,
   onAreaOther,
   onConsent,
@@ -176,18 +183,49 @@ export function ScreenView({
       ) : null}
 
       {screen.description ? (
-        <p className="mt-3 max-w-xl text-[16.5px] leading-relaxed text-muted">{fillCopy(screen.description, answers)}</p>
+        <p
+          className={cn(
+            "mt-3 max-w-xl text-[16.5px] leading-relaxed text-muted",
+            screen.type === "welcome" && "mx-auto text-center",
+          )}
+        >
+          <LinkedCopy text={fillCopy(screen.description, answers)} link={screen.descriptionLink} />
+        </p>
       ) : null}
 
       {screen.paragraphs?.length ? (
-        <div className="mt-5 space-y-4 text-[17px] leading-relaxed text-ink/90">
+        <div
+          className={cn(
+            "mt-5 space-y-4 text-[17px] leading-relaxed text-ink/90",
+            screen.type === "welcome" &&
+              "mx-auto mt-7 max-w-[34ch] space-y-5 text-center text-[17px] leading-[1.5] text-balance text-ink sm:max-w-[40ch] sm:text-[18px]",
+          )}
+        >
           {screen.paragraphs.map((paragraph) => (
             <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
           ))}
         </div>
       ) : null}
 
-      {screen.footnote ? <p className="mt-6 text-[15px] text-muted">{screen.footnote}</p> : null}
+      {screen.supportEmail ? (
+        <p className="mt-5 text-[16.5px] leading-relaxed text-ink/90">
+          Support Email:{" "}
+          <a href={`mailto:${screen.supportEmail}`} className="underline underline-offset-4">
+            {screen.supportEmail}
+          </a>
+        </p>
+      ) : null}
+
+      {screen.footnote ? (
+        <p
+          className={cn(
+            "mt-6 text-[15px] text-muted",
+            screen.type === "welcome" && "mt-8 text-center text-[14px] tracking-[0.01em]",
+          )}
+        >
+          {screen.footnote}
+        </p>
+      ) : null}
 
       {screen.type === "single" && screen.options ? (
         <motion.div
@@ -261,38 +299,6 @@ export function ScreenView({
         </div>
       ) : null}
 
-      {screen.type === "multi" && screen.options ? (
-        <motion.div
-          role="group"
-          aria-labelledby={titleId}
-          className="mt-8"
-          initial="hidden"
-          animate="show"
-          variants={list}
-        >
-          {groupsOf(screen.options).map((group) => (
-            <div key={group.name || "options"} className="mt-5 first:mt-0">
-              {group.name ? (
-                <h2 className="mb-2 text-[12px] font-medium uppercase tracking-[0.16em] text-muted">
-                  {group.name}
-                </h2>
-              ) : null}
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {group.options.map((option) => (
-                  <ChoiceButton
-                    key={option.id}
-                    option={option}
-                    selected={(answers.preferences ?? []).some((item) => item === option.id)}
-                    pressed={false}
-                    onClick={() => onMulti(option.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </motion.div>
-      ) : null}
-
       {screen.type === "confirm" ? (
         <div className="mt-8">
           <label className="flex items-start gap-3 text-[15px] leading-relaxed text-ink">
@@ -318,13 +324,13 @@ export function ScreenView({
       {screen.showText ? <TextUs intro={screen.textIntro} /> : null}
       {screen.showSocial ? <SocialLinks /> : null}
 
-      {screen.type === "done" ? (
+      {screen.type === "done" && screen.cta ? (
         <button
           type="button"
           onClick={onRestart}
           className="mt-8 text-[15px] text-muted underline underline-offset-4"
         >
-          {screen.cta ?? "Start over"}
+          {screen.cta}
         </button>
       ) : null}
 
