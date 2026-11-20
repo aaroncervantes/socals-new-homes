@@ -34,6 +34,7 @@ test("qualified path matches the written question order", () => {
     "area",
     "price",
     "financing",
+    "timeline",
     "first-name",
     "last-name",
     "phone",
@@ -42,9 +43,12 @@ test("qualified path matches the written question order", () => {
   ]);
   assert.equal(questionNumber("journey", { journey: "ready" }), 1);
   assert.equal(questionNumber("area", { journey: "ready" }), 2);
-  assert.equal(questionNumber("first-name", { journey: "ready" }), 5);
-  assert.equal(questionNumber("phone", { journey: "ready" }), 7);
-  assert.equal(questionNumber("confirm", { journey: "ready" }), 8);
+  assert.equal(questionNumber("price", { journey: "ready" }), 3);
+  assert.equal(questionNumber("financing", { journey: "ready" }), 4);
+  assert.equal(questionNumber("timeline", { journey: "ready" }), 5);
+  assert.equal(questionNumber("first-name", { journey: "ready" }), 6);
+  assert.equal(questionNumber("phone", { journey: "ready" }), 8);
+  assert.equal(questionNumber("confirm", { journey: "ready" }), 9);
   assert.equal(progressFor("welcome", { journey: "ready" }), 0);
   assert.equal(progressFor("success", { journey: "ready" }), 1);
 });

@@ -76,6 +76,8 @@ const viewports = [
   await page.getByTestId("option-200-450").click();
   await page.getByTestId("screen-financing").waitFor();
   await page.getByTestId("option-preapproved").click();
+  await page.getByTestId("screen-timeline").waitFor();
+  await page.getByTestId("option-asap").click();
   await page.getByTestId("screen-first-name").waitFor();
   await page.getByTestId("screen-first-name").getByTestId("text-input").fill("Alex");
   await page.getByTestId("cta").click();
@@ -143,6 +145,7 @@ const viewports = [
   await page.getByTestId("cta").click();
   await page.getByTestId("option-200-450").click();
   await page.getByTestId("option-preapproved").click();
+  await page.getByTestId("option-asap").click();
   await page.getByTestId("screen-first-name").waitFor();
   await page.keyboard.type("Sam");
   await page.keyboard.press("Enter");

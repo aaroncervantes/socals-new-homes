@@ -126,6 +126,22 @@ export const screens: Screen[] = [
       { id: "ready-to-preapprove", label: "No, But I’m ready to get Approved ASAP" },
     ]),
     cta: "OK",
+    next: "timeline",
+  },
+  {
+    id: "timeline",
+    type: "single",
+    field: "timeline",
+    question: "When are you hoping to move?",
+    autoAdvance: true,
+    options: withLetters([
+      { id: "asap", label: "As soon as possible" },
+      { id: "1-3", label: "Within 1–3 months" },
+      { id: "3-6", label: "Within 3–6 months" },
+      { id: "6-plus", label: "6+ months" },
+      { id: "exploring", label: "Just exploring" },
+    ]),
+    cta: "OK",
     next: "first-name",
   },
   {
