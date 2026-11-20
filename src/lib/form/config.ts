@@ -62,7 +62,6 @@ export const screens: Screen[] = [
     paragraphs: [
       "We totally get it — sometimes you just want to explore what’s out there.",
       "Hit “Continue” to browse available properties on our site, no strings attached.",
-      "If you prefer you can always check out our site with homes on it. Go for it!",
       "And whenever you’re ready or have questions, we’re just a message away.",
     ],
     cta: "Browse homes",
