@@ -21,7 +21,7 @@ export type LeadRecord = {
   areaOther: string | null;
   priceRange: string;
   financing: string;
-  timeline: string;
+  timeline: string | null;
   classification: string;
   consent: boolean;
   consentAt: string | null;
@@ -63,7 +63,7 @@ const SCHEMA = [
     price_range TEXT NOT NULL,
     preferences TEXT,
     financing TEXT NOT NULL,
-    timeline TEXT NOT NULL,
+    timeline TEXT,
     classification TEXT NOT NULL,
     consent INTEGER NOT NULL,
     consent_at TEXT,
@@ -156,6 +156,7 @@ async function applySchema(connection: Connection): Promise<void> {
   }
   await connection.pool.query("ALTER TABLE leads ADD COLUMN IF NOT EXISTS area_other TEXT");
   await connection.pool.query("ALTER TABLE leads ALTER COLUMN preferences DROP NOT NULL");
+  await connection.pool.query("ALTER TABLE leads ALTER COLUMN timeline DROP NOT NULL");
 }
 
 function connection(): Promise<Connection> {
@@ -221,7 +222,7 @@ function mapLead(row: Row): LeadRecord {
     areaOther: nullable(row, "area_other"),
     priceRange: text(row, "price_range"),
     financing: text(row, "financing"),
-    timeline: text(row, "timeline"),
+    timeline: nullable(row, "timeline"),
     classification: text(row, "classification"),
     consent: Number(row.consent) === 1,
     consentAt: nullable(row, "consent_at"),

@@ -44,7 +44,7 @@ function lines(lead: LeadRecord): Array<[string, string]> {
     ["Typed area", dash(lead.areaOther)],
     ["Budget", answerLabel("price", lead.priceRange)],
     ["Financing", answerLabel("financing", lead.financing)],
-    ["Timeline", answerLabel("timeline", lead.timeline)],
+    ["Timeline", lead.timeline ? answerLabel("timeline", lead.timeline) : "—"],
     ["Lead source", "SoCal’s New Homes Website"],
     ["UTM source", dash(lead.utmSource)],
     ["UTM medium", dash(lead.utmMedium)],

@@ -64,20 +64,24 @@ const viewports = [
   });
   await page.goto(`${base}/?utm_source=instagram&utm_medium=story&utm_campaign=ui`, { waitUntil: "networkidle" });
   await page.getByTestId("cta").click();
-  await page.getByTestId("screen-first-name").waitFor();
-  const nameProgress = await page.getByTestId("progress-bar").evaluate((node) => node.style.width);
-  check("progress leaves zero", nameProgress !== "0%" && nameProgress !== "0");
-  await page.getByTestId("screen-first-name").getByTestId("text-input").fill("Alex");
-  await page.getByTestId("cta").click();
-  await page.getByTestId("screen-last-name").waitFor();
-  await page.getByTestId("screen-last-name").getByTestId("text-input").fill("Nguyen");
-  await page.keyboard.press("Enter");
   await page.getByTestId("screen-journey").waitFor();
+  const journeyProgress = await page.getByTestId("progress-bar").evaluate((node) => node.style.width);
+  check("progress leaves zero", journeyProgress !== "0%" && journeyProgress !== "0");
   await page.screenshot({ path: `${shots}/journey-390.png` });
   await page.getByTestId("option-ready").click();
   await page.getByTestId("screen-area").waitFor();
   await page.getByTestId("option-san-bernardino").click();
   await page.getByTestId("cta").click();
+  await page.getByTestId("screen-price").waitFor();
+  await page.getByTestId("option-200-450").click();
+  await page.getByTestId("screen-financing").waitFor();
+  await page.getByTestId("option-preapproved").click();
+  await page.getByTestId("screen-first-name").waitFor();
+  await page.getByTestId("screen-first-name").getByTestId("text-input").fill("Alex");
+  await page.getByTestId("cta").click();
+  await page.getByTestId("screen-last-name").waitFor();
+  await page.getByTestId("screen-last-name").getByTestId("text-input").fill("Nguyen");
+  await page.keyboard.press("Enter");
   await page.getByTestId("screen-phone").waitFor();
   const phone = page.getByTestId("screen-phone").getByTestId("text-input");
   await phone.fill("123");
@@ -87,12 +91,6 @@ const viewports = [
   const formatted = await phone.inputValue();
   check("phone format", formatted === "(909) 555-0148", formatted);
   await page.getByTestId("cta").click();
-  await page.getByTestId("screen-price").waitFor();
-  await page.getByTestId("option-200-450").click();
-  await page.getByTestId("screen-financing").waitFor();
-  await page.getByTestId("option-preapproved").click();
-  await page.getByTestId("screen-timeline").waitFor();
-  await page.getByTestId("option-asap").click();
   await page.getByTestId("screen-confirm").waitFor();
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-confirm").getByTestId("error").waitFor();
@@ -102,7 +100,14 @@ const viewports = [
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-success").waitFor();
   const success = await page.getByTestId("screen-success").innerText();
-  check("success copy", success.includes("God bless you and your family") && success.includes("hello@cervantesestates.com"));
+  check(
+    "success copy",
+    success.includes("God bless you and your family") &&
+      success.includes("We’ll text you.") &&
+      success.includes("(909) 406-6560") &&
+      !success.includes("hello@cervantesestates.com") &&
+      !success.includes("socials"),
+  );
   check("one lead post", leadRequests.length === 1, String(leadRequests.length));
   await page.screenshot({ path: `${shots}/success-390.png` });
   await page.reload({ waitUntil: "networkidle" });
@@ -117,10 +122,6 @@ const viewports = [
     if (request.url().includes("/api/leads")) leadRequests.push(1);
   });
   await page.goto(base, { waitUntil: "networkidle" });
-  await page.getByTestId("cta").click();
-  await page.getByTestId("screen-first-name").getByTestId("text-input").fill("Alex");
-  await page.getByTestId("cta").click();
-  await page.getByTestId("screen-last-name").getByTestId("text-input").fill("Nguyen");
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-journey").waitFor();
   await page.getByTestId("option-browsing").click();
@@ -137,6 +138,11 @@ const viewports = [
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   await page.goto(base, { waitUntil: "networkidle" });
   await page.getByTestId("cta").click();
+  await page.getByTestId("option-ready").click();
+  await page.getByTestId("option-san-bernardino").click();
+  await page.getByTestId("cta").click();
+  await page.getByTestId("option-200-450").click();
+  await page.getByTestId("option-preapproved").click();
   await page.getByTestId("screen-first-name").waitFor();
   await page.keyboard.type("Sam");
   await page.keyboard.press("Enter");
@@ -155,7 +161,7 @@ const viewports = [
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(base, { waitUntil: "networkidle" });
   await page.getByTestId("cta").click();
-  await page.getByTestId("screen-first-name").waitFor();
+  await page.getByTestId("screen-journey").waitFor();
   await noHorizontalScroll(page, "reduced motion");
   await page.close();
 }

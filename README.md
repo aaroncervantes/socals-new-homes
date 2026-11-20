@@ -20,9 +20,8 @@ npm start
 ## What a visitor does
 
 1. Welcome
-2. First name, last name, then buying journey
-3. If they are just browsing, they get a short note and a link to the homes site. No lead is saved
-4. Otherwise: area, phone, price, financing, timeline, consent, submit
+2. Buying journey. Just browsing leaves for the homes site and does not save a lead
+3. Otherwise: area, price, financing, first name, last name, phone, consent, submit
 5. Success
 
 Back follows the path they actually took. Progress is based on that path, not on every question in the file. Refresh restores an unfinished funnel from this browser. A successful submit clears that local copy. Nothing is a lead until submit.

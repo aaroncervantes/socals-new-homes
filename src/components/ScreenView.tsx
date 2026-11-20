@@ -5,6 +5,7 @@ import { fillCopy } from "@/lib/form/copy";
 import type { Answers, Option, Screen } from "@/lib/form/types";
 import { cn } from "@/lib/cn";
 import { Logo } from "@/components/Logo";
+import { brand } from "@/lib/brand";
 import { SocialLinks, TextUs } from "@/components/SocialLinks";
 
 type Props = {
@@ -205,6 +206,18 @@ export function ScreenView({
             <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
           ))}
         </div>
+      ) : null}
+
+      {screen.showCall ? (
+        <p className="mt-6 text-[17px] leading-relaxed text-ink">
+          <a
+            href={`tel:${brand.textNumberE164}`}
+            data-testid="text-number"
+            className="underline decoration-ink/30 underline-offset-4"
+          >
+            {brand.textNumberDisplay}
+          </a>
+        </p>
       ) : null}
 
       {screen.supportEmail ? (

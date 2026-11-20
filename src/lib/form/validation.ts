@@ -10,6 +10,7 @@ const UUID =
 const NAME = /^[\p{L}][\p{L}\s.'’\-]*$/u;
 
 const QUALIFIED_JOURNEYS = new Set(["ready", "soon", "researching"]);
+const TIMELINES: TimelineId[] = ["asap", "1-3", "3-6", "6-plus", "exploring"];
 
 export type QualifiedJourney = Exclude<JourneyId, "browsing">;
 
@@ -25,7 +26,7 @@ export type Submission = {
   areaOther: string | null;
   price: PriceId;
   financing: FinancingId;
-  timeline: TimelineId;
+  timeline: TimelineId | null;
   consent: true;
   consentVersion: string;
   attribution: Attribution;
@@ -147,8 +148,11 @@ export function parseSubmission(body: unknown): ParseResult {
   if (!price) return { ok: false, error: "Choose a price range." };
   const financing = oneOf<FinancingId>(bag.financing, optionIds("financing"));
   if (!financing) return { ok: false, error: "Tell us where financing stands." };
-  const timeline = oneOf<TimelineId>(bag.timeline, optionIds("timeline"));
-  if (!timeline) return { ok: false, error: "Choose a timeline." };
+  const timeline =
+    bag.timeline == null || bag.timeline === "" ? null : oneOf<TimelineId>(bag.timeline, TIMELINES);
+  if ((bag.timeline != null && bag.timeline !== "") && !timeline) {
+    return { ok: false, error: "Choose a timeline." };
+  }
   const e164 = toE164(phone);
   if (!e164) return { ok: false, error: "Enter a valid US phone number." };
 

@@ -57,6 +57,7 @@ export type Screen = {
   href?: string;
   descriptionLink?: { text: string; href: string };
   supportEmail?: string;
+  showCall?: boolean;
   showSocial?: boolean;
   showText?: boolean;
   textIntro?: string;

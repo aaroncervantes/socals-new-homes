@@ -16,11 +16,10 @@ export const screens: Screen[] = [
     question: "SoCal’s New Homes",
     paragraphs: [
       "We’re so glad you’re here! Whether you’re ready to buy or just browsing, this quick form will help us better serve you",
-      "Your dream home could be just a click away.",
     ],
     footnote: "Takes about 1 minute",
     cta: "Find my home",
-    next: "first-name",
+    next: "journey",
   },
   {
     id: "first-name",
@@ -40,7 +39,7 @@ export const screens: Screen[] = [
     placeholder: "Type your answer here...",
     autoComplete: "family-name",
     cta: "OK",
-    next: "journey",
+    next: "phone",
   },
   {
     id: "journey",
@@ -89,7 +88,7 @@ export const screens: Screen[] = [
       placeholder: "Type an area",
     },
     cta: "OK",
-    next: "phone",
+    next: "price",
   },
   {
     id: "phone",
@@ -100,7 +99,7 @@ export const screens: Screen[] = [
     placeholder: "(000)-000-0000",
     autoComplete: "tel",
     cta: "OK",
-    next: "price",
+    next: "confirm",
   },
   {
     id: "price",
@@ -128,23 +127,7 @@ export const screens: Screen[] = [
       { id: "ready-to-preapprove", label: "No, But I’m ready to get Approved ASAP" },
     ]),
     cta: "OK",
-    next: "timeline",
-  },
-  {
-    id: "timeline",
-    type: "single",
-    field: "timeline",
-    question: "When are you hoping to move?",
-    autoAdvance: true,
-    options: withLetters([
-      { id: "asap", label: "As soon as possible" },
-      { id: "1-3", label: "Within 1–3 months" },
-      { id: "3-6", label: "Within 3–6 months" },
-      { id: "6-plus", label: "6+ months" },
-      { id: "exploring", label: "Just exploring" },
-    ]),
-    cta: "OK",
-    next: "confirm",
+    next: "first-name",
   },
   {
     id: "confirm",
@@ -162,10 +145,9 @@ export const screens: Screen[] = [
     type: "done",
     paragraphs: [
       "God bless you and your family, Thank you for submitting your Inquiry.",
-      "We will be reaching out via Text Message to coordinate a scheduled call with us. Please check your inbox and give us a couple days to reach out.",
-      "Feel free to visit our socials to check out homes or see our reviews in the meantime!",
+      "We’ll text you.",
     ],
-    supportEmail: "hello@cervantesestates.com",
+    showCall: true,
   },
 ];
 

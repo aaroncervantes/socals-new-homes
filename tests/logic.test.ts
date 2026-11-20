@@ -30,37 +30,37 @@ test("qualified path matches the written question order", () => {
   const path = buildPath({ journey: "ready" });
   assert.deepEqual(path, [
     "welcome",
-    "first-name",
-    "last-name",
     "journey",
     "area",
-    "phone",
     "price",
     "financing",
-    "timeline",
+    "first-name",
+    "last-name",
+    "phone",
     "confirm",
     "success",
   ]);
-  assert.equal(questionNumber("first-name", { journey: "ready" }), 1);
-  assert.equal(questionNumber("last-name", { journey: "ready" }), 2);
-  assert.equal(questionNumber("journey", { journey: "ready" }), 3);
-  assert.equal(questionNumber("area", { journey: "ready" }), 4);
-  assert.equal(questionNumber("confirm", { journey: "ready" }), 9);
+  assert.equal(questionNumber("journey", { journey: "ready" }), 1);
+  assert.equal(questionNumber("area", { journey: "ready" }), 2);
+  assert.equal(questionNumber("first-name", { journey: "ready" }), 5);
+  assert.equal(questionNumber("phone", { journey: "ready" }), 7);
+  assert.equal(questionNumber("confirm", { journey: "ready" }), 8);
   assert.equal(progressFor("welcome", { journey: "ready" }), 0);
   assert.equal(progressFor("success", { journey: "ready" }), 1);
 });
 
 test("browsing path stays out of the buyer questions", () => {
   const path = buildPath({ journey: "browsing" });
-  assert.deepEqual(path, ["welcome", "first-name", "last-name", "journey", "browsing"]);
+  assert.deepEqual(path, ["welcome", "journey", "browsing"]);
   assert.equal(path.includes("phone"), false);
+  assert.equal(path.includes("first-name"), false);
   assert.equal(progressFor("browsing", { journey: "browsing" }), 1);
   assert.equal(
-    isValidHistory(["welcome", "first-name", "last-name", "journey", "browsing"], { journey: "browsing" }),
+    isValidHistory(["welcome", "journey", "browsing"], { journey: "browsing" }),
     true,
   );
   assert.equal(
-    isValidHistory(["welcome", "journey", "browsing"], { journey: "browsing" }),
+    isValidHistory(["welcome", "first-name"], { journey: "browsing" }),
     false,
   );
 });

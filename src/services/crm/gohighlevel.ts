@@ -36,7 +36,7 @@ export function crmPayload(lead: LeadRecord): Record<string, string> {
     areaOther: lead.areaOther ?? "",
     budget: answerLabel("price", lead.priceRange),
     financing: answerLabel("financing", lead.financing),
-    timeline: answerLabel("timeline", lead.timeline),
+    timeline: lead.timeline ? answerLabel("timeline", lead.timeline) : "",
     utmSource: lead.utmSource ?? "",
     utmMedium: lead.utmMedium ?? "",
     utmCampaign: lead.utmCampaign ?? "",

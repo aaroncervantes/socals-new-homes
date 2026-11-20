@@ -4,7 +4,7 @@ export type LeadClassification = "qualified_lead" | "nurture_lead" | "browser";
 
 export type ClassificationInput = {
   journey?: JourneyId | string;
-  timeline?: TimelineId | string;
+  timeline?: TimelineId | string | null;
 };
 
 /**
