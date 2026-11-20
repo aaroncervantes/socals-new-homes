@@ -76,7 +76,7 @@ const viewports = [
   await page.getByTestId("screen-last-name").getByTestId("text-input").fill("Nguyen");
   await page.keyboard.press("Enter");
   await page.getByTestId("screen-area").waitFor();
-  await page.getByTestId("option-inland-empire").click();
+  await page.getByTestId("option-san-bernardino").click();
   await page.getByTestId("cities-input").fill("Corona");
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-phone").waitFor();

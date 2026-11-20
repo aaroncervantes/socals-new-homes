@@ -12,17 +12,17 @@ export type CampaignPreset = {
 };
 
 const CAMPAIGNS: Record<string, CampaignPreset> = {
-  corona: { slug: "corona", area: "inland-empire", cities: "Corona" },
-  ontario: { slug: "ontario", area: "inland-empire", cities: "Ontario" },
-  fontana: { slug: "fontana", area: "inland-empire", cities: "Fontana" },
+  corona: { slug: "corona", area: "riverside", cities: "Corona" },
+  ontario: { slug: "ontario", area: "san-bernardino", cities: "Ontario" },
+  fontana: { slug: "fontana", area: "san-bernardino", cities: "Fontana" },
   "jurupa-valley": {
     slug: "jurupa-valley",
-    area: "inland-empire",
+    area: "riverside",
     cities: "Jurupa Valley",
   },
   "rancho-cucamonga": {
     slug: "rancho-cucamonga",
-    area: "inland-empire",
+    area: "san-bernardino",
     cities: "Rancho Cucamonga",
   },
 };

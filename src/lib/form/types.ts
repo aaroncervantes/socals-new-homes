@@ -1,13 +1,9 @@
 export type JourneyId = "ready" | "soon" | "researching" | "browsing";
 export type AreaId =
-  | "inland-empire"
   | "san-bernardino"
   | "riverside"
   | "orange-county"
   | "los-angeles"
-  | "san-diego"
-  | "high-desert"
-  | "open"
   | "other";
 export type PriceId = "under-500" | "500-650" | "650-800" | "800-1m" | "1m-plus" | "unsure";
 export type FinancingId = "preapproved" | "ready-to-preapprove" | "cash" | "figuring-out";

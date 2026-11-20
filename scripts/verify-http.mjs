@@ -14,7 +14,7 @@ function payload(overrides = {}) {
       journey: "ready",
       firstName: "Funnel",
       lastName: "Test",
-      area: "inland-empire",
+      area: "san-bernardino",
       cities: "Ontario",
       phone: "9095550199",
       price: "under-500",

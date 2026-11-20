@@ -14,7 +14,7 @@ const qualified: Answers = {
   journey: "ready",
   firstName: "Alex",
   lastName: "Rivera",
-  area: "inland-empire",
+  area: "san-bernardino",
   cities: "Corona",
   phone: "(909) 555-0199",
   price: "under-500",
@@ -119,9 +119,10 @@ test("other area stores a short typed value and ignores it otherwise", () => {
   assert.equal(long.ok, false);
 });
 
-test("campaign presets prefill inland empire cities", () => {
+test("campaign presets prefill a listed county and city", () => {
   assert.equal(getCampaign("Corona")?.cities, "Corona");
-  assert.equal(getCampaign("rancho-cucamonga")?.area, "inland-empire");
+  assert.equal(getCampaign("Corona")?.area, "riverside");
+  assert.equal(getCampaign("rancho-cucamonga")?.area, "san-bernardino");
   assert.equal(getCampaign("missing"), null);
 });
 

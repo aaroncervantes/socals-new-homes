@@ -72,7 +72,7 @@ UTM parameters from the landing URL are kept for the whole visit and saved on th
 
 ## Later campaign routes
 
-`src/lib/campaigns.ts` holds presets for Corona, Ontario, Fontana, Jurupa Valley, and Rancho Cucamonga. The routes are not built. A later page can send people to `/?campaign=corona`, which preselects Inland Empire and the city. `?area=inland-empire` also preselects a known area.
+`src/lib/campaigns.ts` holds presets for Corona, Ontario, Fontana, Jurupa Valley, and Rancho Cucamonga. The routes are not built. A later page can send people to `/?campaign=corona`, which preselects Riverside and the city. Ontario, Fontana, and Rancho Cucamonga preselect San Bernardino County. `?area=` preselects only a current option: san-bernardino, riverside, orange-county, los-angeles, or other.
 
 ## Brand and legal placeholders
 
