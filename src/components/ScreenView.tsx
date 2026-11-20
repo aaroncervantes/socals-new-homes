@@ -41,15 +41,24 @@ function LinkedCopy({
   );
 }
 
-function ChoiceFace({ option }: { option: Option }) {
+function ChoiceFace({ option, tone }: { option: Option; tone: "ink" | "paper" }) {
+  const paper = tone === "paper";
   return (
     <>
       {option.letter ? (
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-current/30 text-[13px] font-medium">
+        <span
+          className={cn(
+            "grid h-8 w-8 shrink-0 place-items-center rounded-full border text-[13px] font-medium",
+            paper ? "border-paper/45 text-paper" : "border-line text-ink",
+          )}
+          style={{ WebkitTextFillColor: paper ? "#f3efe7" : "#1b1916" }}
+        >
           {option.letter}
         </span>
       ) : null}
-      <span>{option.label}</span>
+      <span className={paper ? "text-paper" : "text-ink"} style={{ WebkitTextFillColor: paper ? "#f3efe7" : "#1b1916" }}>
+        {option.label}
+      </span>
     </>
   );
 }
@@ -80,26 +89,21 @@ function ChoiceButton({
       }}
       whileTap={reduce ? undefined : { scale: 0.975 }}
       transition={reduce ? { duration: 0.12 } : settle}
-      className="relative flex min-h-14 w-full overflow-hidden rounded-2xl border border-line bg-card text-left text-[16.5px] leading-snug text-ink"
+      className={cn(
+        "relative flex min-h-14 w-full items-center gap-3 overflow-hidden rounded-2xl border px-3.5 py-3 text-left text-[16.5px] leading-snug",
+        selected ? "border-ink bg-ink" : "border-line bg-card",
+      )}
     >
-      <span className="relative z-10 flex min-w-0 flex-1 items-center gap-3 px-3.5 py-3">
-        <ChoiceFace option={option} />
-      </span>
       <motion.span
         aria-hidden="true"
-        className="absolute inset-0 flex items-center bg-ink text-paper"
+        className="pointer-events-none absolute inset-0 origin-left bg-ink"
         initial={false}
-        animate={
-          reduce
-            ? { opacity: selected ? 1 : 0, clipPath: "inset(0% 0% 0% 0%)" }
-            : { opacity: 1, clipPath: selected ? "inset(0% 0% 0% 0%)" : "inset(0% 100% 0% 0%)" }
-        }
-        transition={reduce ? { duration: 0.16, ease: "easeOut" } : { duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
-      >
-        <span className="flex min-w-0 flex-1 items-center gap-3 px-3.5 py-3">
-          <ChoiceFace option={option} />
-        </span>
-      </motion.span>
+        animate={reduce ? { opacity: selected ? 1 : 0 } : { scaleX: selected ? 1 : 0, opacity: 1 }}
+        transition={reduce ? { duration: 0.16, ease: "easeOut" } : { duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
+      />
+      <span className="relative z-10 flex min-w-0 flex-1 items-center gap-3">
+        <ChoiceFace option={option} tone={selected ? "paper" : "ink"} />
+      </span>
     </motion.button>
   );
 }
@@ -210,7 +214,34 @@ export function ScreenView({
         </motion.h1>
       ) : null}
 
-      {screen.paragraphs?.length ? (
+      {screen.type === "done" ? (
+        <div className="mx-auto mt-10 flex max-w-[34ch] flex-col items-center gap-6 text-center text-[15.5px] leading-relaxed text-ink/85">
+          {screen.paragraphs?.slice(1).map((paragraph) => (
+            <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
+          ))}
+          {screen.supportEmail ? (
+            <p>
+              Support Email:{" "}
+              <a href={`mailto:${screen.supportEmail}`} className="underline underline-offset-4">
+                {screen.supportEmail}
+              </a>
+            </p>
+          ) : null}
+          {screen.showCall ? (
+            <p>
+              <a
+                href={`tel:${brand.textNumberE164}`}
+                data-testid="text-number"
+                className="underline decoration-ink/30 underline-offset-4"
+              >
+                {brand.textNumberDisplay}
+              </a>
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {screen.type !== "done" && screen.paragraphs?.length ? (
         <div
           className={cn(
             "mt-5 space-y-4 text-[17px] leading-relaxed text-ink/90",
@@ -218,13 +249,13 @@ export function ScreenView({
               "mx-auto mt-7 max-w-[34ch] space-y-5 text-center text-[17px] leading-[1.5] text-balance text-ink sm:max-w-[40ch] sm:text-[18px]",
           )}
         >
-          {(screen.type === "done" ? screen.paragraphs.slice(1) : screen.paragraphs).map((paragraph) => (
+          {screen.paragraphs.map((paragraph) => (
             <p key={paragraph}>{fillCopy(paragraph, answers)}</p>
           ))}
         </div>
       ) : null}
 
-      {screen.supportEmail ? (
+      {screen.type !== "done" && screen.supportEmail ? (
         <p className="mt-5 text-[16.5px] leading-relaxed text-ink/90">
           Support Email:{" "}
           <a href={`mailto:${screen.supportEmail}`} className="underline underline-offset-4">
@@ -233,7 +264,7 @@ export function ScreenView({
         </p>
       ) : null}
 
-      {screen.showCall ? (
+      {screen.type !== "done" && screen.showCall ? (
         <p className="mt-6 text-[17px] leading-relaxed text-ink">
           <a
             href={`tel:${brand.textNumberE164}`}
