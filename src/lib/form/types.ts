@@ -1,0 +1,80 @@
+export type JourneyId = "ready" | "soon" | "researching" | "browsing";
+export type AreaId =
+  | "inland-empire"
+  | "orange-county"
+  | "los-angeles"
+  | "san-diego"
+  | "high-desert"
+  | "open";
+export type PriceId = "under-500" | "500-650" | "650-800" | "800-1m" | "1m-plus" | "unsure";
+export type FinancingId = "preapproved" | "ready-to-preapprove" | "cash" | "figuring-out";
+export type TimelineId = "asap" | "1-3" | "3-6" | "6-plus" | "exploring";
+export type PreferenceId =
+  | "beds-3"
+  | "beds-4"
+  | "beds-5"
+  | "larger-lot"
+  | "next-gen"
+  | "adu"
+  | "single-story"
+  | "two-story"
+  | "low-hoa"
+  | "no-hoa"
+  | "quick-move-in"
+  | "incentives"
+  | "new-community"
+  | "age-55"
+  | "unsure";
+
+export type Answers = {
+  journey?: JourneyId;
+  firstName?: string;
+  lastName?: string;
+  area?: AreaId;
+  cities?: string;
+  phone?: string;
+  price?: PriceId;
+  preferences?: PreferenceId[];
+  financing?: FinancingId;
+  timeline?: TimelineId;
+  consent?: boolean;
+};
+
+export type Option = {
+  id: string;
+  label: string;
+  letter?: string;
+  group?: string;
+};
+
+export type ScreenType =
+  | "welcome"
+  | "single"
+  | "text"
+  | "phone"
+  | "multi"
+  | "info"
+  | "confirm"
+  | "done";
+
+export type Screen = {
+  id: string;
+  type: ScreenType;
+  field?: keyof Answers;
+  eyebrow?: string;
+  question?: string;
+  description?: string;
+  paragraphs?: string[];
+  footnote?: string;
+  placeholder?: string;
+  autoComplete?: string;
+  autoAdvance?: boolean;
+  options?: Option[];
+  extra?: { field: "cities"; label: string; placeholder: string };
+  next?: string;
+  branchingRules?: { when: string; next: string }[];
+  cta?: string;
+  showSocial?: boolean;
+  showText?: boolean;
+  textIntro?: string;
+};
