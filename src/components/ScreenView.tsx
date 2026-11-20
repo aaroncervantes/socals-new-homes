@@ -1,6 +1,4 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
-import { CONSENT_TEXT } from "@/lib/consent";
 import { fillCopy } from "@/lib/form/copy";
 import type { Answers, Option, Screen } from "@/lib/form/types";
 import { cn } from "@/lib/cn";
@@ -16,7 +14,6 @@ type Props = {
   onSingle: (id: string) => void;
   onText: (value: string) => void;
   onAreaOther: (value: string) => void;
-  onConsent: (value: boolean) => void;
   onRestart: () => void;
 };
 
@@ -114,7 +111,6 @@ export function ScreenView({
   onSingle,
   onText,
   onAreaOther,
-  onConsent,
   onRestart,
 }: Props) {
   const reduce = useReducedMotion() === true;
@@ -208,6 +204,15 @@ export function ScreenView({
         </div>
       ) : null}
 
+      {screen.supportEmail ? (
+        <p className="mt-5 text-[16.5px] leading-relaxed text-ink/90">
+          Support Email:{" "}
+          <a href={`mailto:${screen.supportEmail}`} className="underline underline-offset-4">
+            {screen.supportEmail}
+          </a>
+        </p>
+      ) : null}
+
       {screen.showCall ? (
         <p className="mt-6 text-[17px] leading-relaxed text-ink">
           <a
@@ -216,15 +221,6 @@ export function ScreenView({
             className="underline decoration-ink/30 underline-offset-4"
           >
             {brand.textNumberDisplay}
-          </a>
-        </p>
-      ) : null}
-
-      {screen.supportEmail ? (
-        <p className="mt-5 text-[16.5px] leading-relaxed text-ink/90">
-          Support Email:{" "}
-          <a href={`mailto:${screen.supportEmail}`} className="underline underline-offset-4">
-            {screen.supportEmail}
           </a>
         </p>
       ) : null}
@@ -308,28 +304,6 @@ export function ScreenView({
               "w-full appearance-none border-0 border-b border-ink/25 bg-transparent py-3 font-serif text-[1.7rem] leading-tight text-ink shadow-none outline-none placeholder:text-[#8a847c] focus:border-ink focus:outline-none focus-visible:outline-none",
             )}
           />
-        </div>
-      ) : null}
-
-      {screen.type === "confirm" ? (
-        <div className="mt-8">
-          <label className="flex items-start gap-3 text-[15px] leading-relaxed text-ink">
-            <input
-              data-testid="consent"
-              type="checkbox"
-              checked={answers.consent === true}
-              onChange={(event) => onConsent(event.target.checked)}
-              className="mt-0.5 shrink-0"
-            />
-            <span>{CONSENT_TEXT}</span>
-          </label>
-          <p className="mt-4 text-[14px] leading-relaxed text-muted">
-            <Link href="/privacy" className="underline underline-offset-4">Privacy Policy</Link>
-            <span aria-hidden="true"> · </span>
-            <Link href="/terms" className="underline underline-offset-4">Terms</Link>
-            <span aria-hidden="true"> · </span>
-            <Link href="/disclosures" className="underline underline-offset-4">Real Estate Disclosures</Link>
-          </p>
         </div>
       ) : null}
 

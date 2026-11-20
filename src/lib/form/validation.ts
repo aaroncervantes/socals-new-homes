@@ -26,8 +26,8 @@ export type Submission = {
   price: PriceId;
   financing: FinancingId;
   timeline: TimelineId;
-  consent: true;
-  consentVersion: string;
+  consent: boolean;
+  consentVersion: string | null;
   attribution: Attribution;
 };
 
@@ -72,10 +72,7 @@ export function validateScreen(screen: Screen, answers: Partial<Answers>): strin
     return null;
   }
 
-  if (screen.type === "confirm") {
-    if (answers.consent !== true) return "Please agree to be contacted so we can follow up.";
-    return null;
-  }
+  if (screen.type === "confirm") return null;
 
   return null;
 }
@@ -117,9 +114,7 @@ export function parseSubmission(body: unknown): ParseResult {
   if (elapsed < minimum) {
     return { ok: false, error: "Please take a moment and submit again." };
   }
-  if (record.consent !== true || record.consentVersion !== CONSENT_VERSION) {
-    return { ok: false, error: "Please agree to be contacted so we can follow up." };
-  }
+  const consented = record.consent === true && record.consentVersion === CONSENT_VERSION;
   const answers = record.answers;
   if (!answers || typeof answers !== "object") {
     return { ok: false, error: "Please check your answers and try again." };
@@ -169,8 +164,8 @@ export function parseSubmission(body: unknown): ParseResult {
       price,
       financing,
       timeline,
-      consent: true,
-      consentVersion: CONSENT_VERSION,
+      consent: consented,
+      consentVersion: consented ? CONSENT_VERSION : null,
       attribution: cleanAttribution(record.attribution),
     },
   };

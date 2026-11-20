@@ -21,7 +21,7 @@ npm start
 
 1. Welcome
 2. Buying journey. Just browsing leaves for the homes site and does not save a lead
-3. Otherwise: location, price, pre-approval, timeline, first name, last name, phone, consent, submit
+3. Otherwise: location, price, pre-approval, timeline, first name, last name, phone, submit
 5. Success
 
 Back follows the path they actually took. Progress is based on that path, not on every question in the file. Refresh restores an unfinished funnel from this browser. A successful submit clears that local copy. Nothing is a lead until submit.

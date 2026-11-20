@@ -105,7 +105,14 @@ test("submission accepts a low budget and rejects a browser payload", () => {
   const fast = parseSubmission({ ...payload(qualified), startedAt: Date.now() });
   assert.equal(fast.ok, false);
   const noConsent = parseSubmission({ ...payload(qualified), consent: false });
-  assert.equal(noConsent.ok, false);
+  assert.equal(noConsent.ok, true);
+  if (noConsent.ok) {
+    assert.equal(noConsent.value.consent, false);
+    assert.equal(noConsent.value.consentVersion, null);
+  }
+  const absent = parseSubmission({ ...payload(qualified), consent: undefined, consentVersion: undefined });
+  assert.equal(absent.ok, true);
+  if (absent.ok) assert.equal(absent.value.consent, false);
 });
 
 test("other area stores a short typed value and ignores it otherwise", () => {

@@ -94,21 +94,30 @@ const viewports = [
   check("phone format", formatted === "(909) 555-0148", formatted);
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-confirm").waitFor();
-  await page.getByTestId("cta").click();
-  await page.getByTestId("screen-confirm").getByTestId("error").waitFor();
-  check("consent unchecked", (await page.getByTestId("consent").isChecked()) === false);
-  await page.getByTestId("consent").check();
+  const confirm = await page.getByTestId("screen-confirm").innerText();
+  check(
+    "hiring note",
+    confirm.includes("We don’t share property lists, market evaluations, or home tours until we’ve signed a hiring agreement.") &&
+      (await page.getByTestId("consent").count()) === 0 &&
+      !confirm.includes("Privacy Policy") &&
+      !confirm.includes("Real Estate Disclosures"),
+  );
   await page.waitForTimeout(3000);
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-success").waitFor();
   const success = await page.getByTestId("screen-success").innerText();
+  const mail = await page.getByTestId("screen-success").locator("a[href^='mailto:']").getAttribute("href");
+  const tel = await page.getByTestId("screen-success").getByTestId("text-number").getAttribute("href");
   check(
     "success copy",
-    success.includes("God bless you and your family") &&
-      success.includes("We’ll text you.") &&
-      success.includes("(909) 406-6560") &&
-      !success.includes("hello@cervantesestates.com") &&
-      !success.includes("socials"),
+    success.includes("God bless you and your family, Thank you for submitting your Inquiry.") &&
+      success.includes("We will be reaching out via Text Message") &&
+      success.includes("Feel free to visit our socials") &&
+      success.includes("socalsnewhomes@cervantesre.com") &&
+      mail === "mailto:socalsnewhomes@cervantesre.com" &&
+      tel === "tel:+19094066560" &&
+      success.indexOf("socalsnewhomes@cervantesre.com") < success.indexOf("(909) 406-6560") &&
+      (await page.getByTestId("screen-success").getByRole("button").count()) === 0,
   );
   check("one lead post", leadRequests.length === 1, String(leadRequests.length));
   await page.screenshot({ path: `${shots}/success-390.png` });

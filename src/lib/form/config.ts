@@ -149,8 +149,7 @@ export const screens: Screen[] = [
     type: "confirm",
     question: "You’re all set, {firstName}.",
     paragraphs: [
-      "We’ll review what you’re looking for and reach out with new-home options that make sense for your search.",
-      "Instead of sending random listings, our goal is to help narrow down communities, builders, incentives, and homes that actually fit what you’re looking for.",
+      "We appreciate your interest. We don’t share property lists, market evaluations, or home tours until we’ve signed a hiring agreement. Thank you for understanding.",
     ],
     cta: "Submit my home search",
     next: "success",
@@ -160,8 +159,10 @@ export const screens: Screen[] = [
     type: "done",
     paragraphs: [
       "God bless you and your family, Thank you for submitting your Inquiry.",
-      "We’ll text you.",
+      "We will be reaching out via Text Message to coordinate a scheduled call with us. Please check your inbox and give us a couple days to reach out.",
+      "Feel free to visit our socials to check out homes or see our reviews in the meantime!",
     ],
+    supportEmail: "socalsnewhomes@cervantesre.com",
     showCall: true,
   },
 ];

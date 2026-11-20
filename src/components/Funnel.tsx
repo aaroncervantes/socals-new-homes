@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { setAnalyticsContext, track } from "@/lib/analytics";
 import { cn } from "@/lib/cn";
-import { CONSENT_VERSION } from "@/lib/consent";
 import { fillCopy } from "@/lib/form/copy";
 import { getScreen } from "@/lib/form/config";
 import { resolveNext } from "@/lib/form/branching";
@@ -184,13 +183,6 @@ export function Funnel() {
     setError(null);
   }
 
-  function setConsent(value: boolean) {
-    const current = stateRef.current;
-    if (!current) return;
-    commit({ ...current, answers: { ...current.answers, consent: value } });
-    setError(null);
-  }
-
   function goBack() {
     if (timer.current) window.clearTimeout(timer.current);
     const current = stateRef.current;
@@ -243,8 +235,6 @@ export function Funnel() {
           idempotencyKey: current.idempotencyKey,
           startedAt: current.startedAt,
           honeypot: honeypot.current,
-          consent: current.answers.consent === true,
-          consentVersion: CONSENT_VERSION,
           answers: {
             journey: current.answers.journey,
             firstName: current.answers.firstName,
@@ -403,7 +393,6 @@ export function Funnel() {
                 onSingle={chooseSingle}
                 onText={setText}
                 onAreaOther={setAreaOther}
-                onConsent={setConsent}
                 onRestart={restart}
               />
             </div>
