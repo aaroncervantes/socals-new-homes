@@ -160,8 +160,8 @@ export const screens: Screen[] = [
     paragraphs: [
       "God bless you and your family, Thank you for submitting your Inquiry.",
       "We will be reaching out via Text Message to coordinate a scheduled call with us.",
+      "or reach out directly to us:",
     ],
-    supportEmail: "socalsnewhomes@cervantesre.com",
     showCall: true,
   },
 ];
