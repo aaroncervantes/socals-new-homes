@@ -110,18 +110,20 @@ const viewports = [
   await page.getByTestId("cta").click();
   await page.getByTestId("screen-success").waitFor();
   const success = await page.getByTestId("screen-success").innerText();
-  const mail = await page.getByTestId("screen-success").locator("a[href^='mailto:']").getAttribute("href");
+  const mailCount = await page.getByTestId("screen-success").locator("a[href^='mailto:']").count();
   const tel = await page.getByTestId("screen-success").getByTestId("text-number").getAttribute("href");
   check(
     "success copy",
     success.includes("God bless you and your family, Thank you for submitting your Inquiry.") &&
       success.includes("We will be reaching out via Text Message to coordinate a scheduled call with us.") &&
+      success.includes("or reach out directly to us:") &&
       !success.includes("Please check your inbox") &&
       !success.includes("socials") &&
-      success.includes("socalsnewhomes@cervantesre.com") &&
-      mail === "mailto:socalsnewhomes@cervantesre.com" &&
+      !success.includes("Support Email") &&
+      !success.includes("socalsnewhomes@cervantesre.com") &&
+      mailCount === 0 &&
       tel === "tel:+19094066560" &&
-      success.indexOf("socalsnewhomes@cervantesre.com") < success.indexOf("(909) 406-6560") &&
+      success.indexOf("or reach out directly to us:") < success.indexOf("(909) 406-6560") &&
       (await page.getByTestId("screen-success").getByRole("button").count()) === 0,
   );
   check("one lead post", leadRequests.length === 1, String(leadRequests.length));
